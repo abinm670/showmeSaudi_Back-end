@@ -1,36 +1,20 @@
 var mongoose = require("mongoose"); 
 var Schema = mongoose.Schema;
 
-//both Schema can be modify to meet our needs 
-
-//Define comments Schema
-const commentSchema = new Schema(
-
-   {
-       content: String, 
-       publishedOn: {type:Date, default:Date.now},
-       author:String, 
-       published:{type:Boolean, default:true}
-   }, {timestamps:true}
-); 
-
-
-
-
 //Touring Schema
 var touringSchema = new Schema(
     {
-        title: {type: String, index= true},
+        title: String, 
         AboutMe: {type:String, required: true}, 
         likes:{type:Number, default:0}, 
-        comments:[commentSchema]
-
-
-    }
+        // comments:[commentSchema]
+        sponsored:{type:Boolean, default:false}, 
+        activity:[]
+    }, {timestamps:true}
 ) 
 
 
-var user = new Schema(
+var userSchema = new Schema(
     {
     name:
     {
@@ -42,5 +26,28 @@ var user = new Schema(
     tour:{type:Boolean, default:false}, 
     touring:[touringSchema], 
     
-    }
+    }, {timestamps:true}
 )
+
+//manipulate data with Models 
+var User = mongoose.model("User", userSchema);
+var Touring = mongoose.model("Touring", touringSchema ); 
+
+//Export Models
+module.exports = {User, Touring}
+
+
+//both Schema can be modify to meet our needs 
+
+//Define comments Schema
+// const commentSchema = new Schema(
+
+//    {
+//        content: String, 
+//        publishedOn: {type:Date, default:Date.now},
+//        author:String, 
+//        published:{type:Boolean, default:true}
+//    }, {timestamps:true}
+// ); 
+
+
