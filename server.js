@@ -4,6 +4,9 @@ const express = require('express');
 //mongoose required statment 
 const mongoose = require('mongoose');
 
+// call the comment file 
+// var Comment = require('./app/models/comments');
+
 //db require and establish the connection
 const db = require('./config/db');
 //and the establish db connection
@@ -24,11 +27,49 @@ var Touring = require('./app/models/user').Touring
 const app = express();
 app.use(express.json());
 
+// -1 Create comments 
+// var com1 = new Comment({
+//     text: "hello the new world"
+// })
+// // -2 save 
+// com1.save(function(err, saveCom)
+// {
+//     if(err){
+//     return console.log(err)
+//     }
+//     else{ console.log('comm saved')}
+// })
+
+// // 1- create a new user 
+// var ahmed = new User ({
+//     name:
+//     {
+//         firtNmae:"Nona", 
+//         lastName:"BM",
+
+//     }
+
+// })
+
+
 
 //create user 
-app.post('/api/users', (req, res) => {
+app.post('/api/newUser', (req, res) => {
+
+    if (req.body.touring.length > 0) {
+        req.body.tour = true
+
+    }
+    else {
+        req.body.tour = false
+    }
+
+
     User.create(req.body, (error, newUser) => {
+        
+        console.log(req.body.touring.length)
         res.json(newUser);
+        
     })
 })
 
@@ -53,6 +94,14 @@ app.post('/api/users/:userId/touring', (req, res) => {
 app.get('/api/users/:id', (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         res.send(foundUser)
+    })
+})
+
+//show all user
+app.get('/api/users_all', (req, res) => {
+    User.find({}, (err, foundUser) => {
+        res.send(foundUser);
+
     })
 })
 

@@ -6,10 +6,13 @@ var touringSchema = new Schema(
     {
         title: String, 
         AboutMe: {type:String, required: true}, 
-        likes:{type:Number, default:0}, 
-        // comments:[commentSchema]
+        activity:[],
+        imageURL: String,  
+        likes:{type:Number, default:0},
+        // comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
         sponsored:{type:Boolean, default:false}, 
-        activity:[]
+        
+    
     }, {timestamps:true}
 ) 
 
@@ -20,11 +23,13 @@ var userSchema = new Schema(
     {
         firtNmae:String, 
         lastName:String, 
-    }, 
+        // required: true
+    } , 
     address: String, 
     phone: String,
     tour:{type:Boolean, default:false}, 
-    touring:[touringSchema], 
+    touring:[touringSchema],
+    img:String 
     
     }, {timestamps:true}
 )
