@@ -15,18 +15,18 @@ router.use(express.urlencoded());
 //create user 
 router.post('/api/newUser', (req, res) => {
 
-    if (req.body.touring.length > 0) {
-        req.body.tour = true
+    // if (req.body.touring.length > 0) {
+    //     req.body.tour = true
 
-    }
-    else {
-        req.body.tour = false
-    }
+    // }
+    // else {
+    //     req.body.tour = false
+    // }
 
 
     User.create(req.body, (error, newUser) => {
         
-        console.log(req.body.touring.length)
+      //  console.log(req.body.touring.length)
         res.json(newUser);
         
     })
