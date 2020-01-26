@@ -15,17 +15,19 @@ mongoose.connection.once('open', function () {
     console.log('conected to mongo');
 })
 
-//Create a new user 
-var User = require('./app/models/user').User
-var Touring = require('./app/models/user').Touring
-
-
 //optional 
 //defien---------------------------------------------
 
 //Instantiate Express Application Object 
 const app = express();
 app.use(express.json());
+
+// require route 
+const indexRouter = require('./app/routes/index');
+app.use(indexRouter);
+const usersRouter = require('./app/routes/users');
+app.use(usersRouter);
+
 
 // -1 Create comments 
 // var com1 = new Comment({
@@ -52,65 +54,6 @@ app.use(express.json());
 // })
 
 
-
-//create user 
-app.post('/api/newUser', (req, res) => {
-
-    if (req.body.touring.length > 0) {
-        req.body.tour = true
-
-    }
-    else {
-        req.body.tour = false
-    }
-
-
-    User.create(req.body, (error, newUser) => {
-        
-        console.log(req.body.touring.length)
-        res.json(newUser);
-        
-    })
-})
-
-//create touring embedded in user
-app.post('/api/users/:userId/touring', (req, res) => {
-    //store new Touring profile with data from request body
-    var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
-
-    //find user in db by id and add new tourProfile
-    User.findById(req.params.userId, (error, findUser) => {
-        findUser.touring.push(newTourProfile);
-        findUser.save(
-            (err, savedUser) => {
-                res.json(savedUser);
-                // console,log(savedUser)
-            });
-
-    });
-});
-
-// Create Show Route 
-app.get('/api/users/:id', (req, res) => {
-    User.findById(req.params.id, (err, foundUser) => {
-        res.send(foundUser)
-    })
-})
-
-//show all user
-app.get('/api/users_all', (req, res) => {
-    User.find({}, (err, foundUser) => {
-        res.send(foundUser);
-
-    })
-})
-
-
-
-
-// view the index message using the route 
-const indexRouter = require('./app/routes/index');
-app.use(indexRouter);
 
 //Define PORT for API to run on 
 const port = process.env.Port || 7000;
