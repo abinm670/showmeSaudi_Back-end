@@ -49,11 +49,14 @@ var touringSchema = new Schema(
 ) 
 var userSchema = new Schema(
     {
-     firstName:{type:String, required:true},
+    usrGenInfo:
+    {
+
+        firstName:{type:String, required:true},
         lastName:{type:String, required:true},
         // email:{type:String, required:true}, 
         // password: passwordPrompt()
-    
+    } , 
     address: String, 
     phone: String,
     tour:{type:Boolean, default:false}, 
