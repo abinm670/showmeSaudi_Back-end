@@ -37,7 +37,7 @@ var touringSchema = new Schema(
         imageURL: String,
         likes:{type:Number, default:0},  
         comments: [commentsSchema],
-        price: { type: Number, default:"Free" },
+        price: { type: Number, default:0 },
         // location: {
         //     cityName:String, 
         //     type: pointSchema,
@@ -52,18 +52,14 @@ var userSchema = new Schema(
     usrGenInfo:
     {
 
-        firstName:{type:String, required:true},
-        lastName:{type:String, required:true},
+    firstName:{type:String, required:true},
+    lastName:{type:String, required:true},
         // email:{type:String, required:true}, 
         // password: passwordPrompt()     
-        firtNmae:{type:String, required:true},
-        lastName:{type:String, required:true},
-        // email:{type:String, required:true}, 
-        // password: passwordPrompt()
     } , 
     address: String, 
     phone: String,
-    tour:{type:Boolean, default:false}, 
+    tour:{type:Boolean, default:false, required: true}, 
     touring:[touringSchema],
     img:String 
     }

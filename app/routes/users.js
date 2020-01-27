@@ -15,28 +15,31 @@ router.use(express.urlencoded());
 //create user 
 router.post('/api/newUser', (req, res) => {
 
-    if (req.body.touring.length > 0) {
-        req.body.tour = true
+    User.create(req.body, (error, newUser) => {
+        
+        
+        if(!req.body.tour)
+        {
 
-    }
-    else {
-        req.body.tour = false
-    }
-
+              //store new Touring profile with data from request body
+    var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
+    //  res.json(newUser)
+    //find user in db by id and add new tourProfile
+    User.findById(req.params.userId, (error, findUser) => {
+        findUser.touring.push(newTourProfile);
+        findUser.save(
+            (err, savedUser) => {
+                res.json(savedUser + //create user 
+router.post('/api/newUser', (req, res) => {
 
     User.create(req.body, (error, newUser) => {
         
-        console.log(req.body.touring.length)
-        res.json(newUser);
         
-    })
-})
-
-//create touring embedded in user
-router.post('/api/users/:userId/touring', (req, res) => {
-    //store new Touring profile with data from request body
+        if(!req.body.tour)
+        {
+              //store new Touring profile with data from request body
     var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
-
+     res.json(newUser)
     //find user in db by id and add new tourProfile
     User.findById(req.params.userId, (error, findUser) => {
         findUser.touring.push(newTourProfile);
@@ -47,7 +50,25 @@ router.post('/api/users/:userId/touring', (req, res) => {
             });
 
     });
-});
+    
+        }else {
+            res.json(newUser);
+        }
+        
+    })
+}));
+                // console,log(savedUser)
+            });
+
+    });
+    
+        }else {
+            res.json(newUser);
+        }
+        
+    })
+})
+
 
 // show specific user 
 router.get('/api/users/:id', (req, res) => {
