@@ -1,15 +1,17 @@
 // Require necessary NPM Packages
 const express = require('express');
 
-// Require Mongoose Model for User & Touring
-var User = require('../models/user').User
-var Touring = require('../models/user').Touring
+// Require Mongoose Model for User
+var User = require('../models/user');
+var Touring = require('../models/touring');
+var Comment = require('../models/comment');
 
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
 // Middleware required for post
 router.use(express.urlencoded());
+
 
 
 //create user 
@@ -37,7 +39,6 @@ router.post('/api/newUser', (req, res) => {
         console.log("yes you did it wrong",  errr);
 
     });
-
 });
 
 // show specific user 
@@ -61,6 +62,13 @@ router.get('/api/users', (req, res) => {
     // })
 })
 
+//show all tour guy
+router.get('/api/TourGuy', (req, res) => {
+    User.find({tour:"true"}, (err, foundUser) => {
+        res.send(foundUser);
+
+    })
+})
 // delete user account
 router.delete('/api/user_info/delete/:id', (req, res) => {
     User.findByIdAndRemove(req.params.id, (err, data) => {
