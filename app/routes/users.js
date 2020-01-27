@@ -12,7 +12,6 @@ const router = express.Router();
 // Middleware required for post
 router.use(express.urlencoded());
 
-
 //create user 
 router.post('/api/newUser', (req, res) => {
     // if(req.body.touring[1])
@@ -28,15 +27,13 @@ router.post('/api/newUser', (req, res) => {
 
         }
         else {
-            res.json(newTrUser);
+          res.json(newTrUser);
         }
 
     }).catch((errr) =>
     {
         console.log("yes you did it wrong",  errr);
-
     });
-
 });
 
 // show specific user 
