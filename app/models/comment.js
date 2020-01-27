@@ -14,8 +14,8 @@ var commentsSchema = new Schema(
 )
 
 //manipulate data with Models 
-//var Comment = mongoose.model("Comment", commentsSchema);
+var Comment = mongoose.model("Comment", commentsSchema);
 
 //Export Models
-//module.exports = Comment;
-module.exports = commentsSchema;
+module.exports = {Comment,commentsSchema};
+//module.exports = commentsSchema;

@@ -1,7 +1,7 @@
 var mongoose = require("mongoose"); 
 var Schema = mongoose.Schema;
 
-const Comment = require('./comment.js');
+const Comment = require('./comment.js').commentsSchema;
 const userSchema = require('./user.js');
 
 //console.log(Comment);
@@ -15,7 +15,7 @@ var touringSchema = new Schema(
         activity:[],
         imageURL: String,
         likes:{type:Number, default:0},  
-        comments: Comment.obj,
+        comments: [Comment.obj],
         // location: {
         //     cityName:String, 
         //     type: pointSchema,
@@ -26,6 +26,7 @@ var touringSchema = new Schema(
     }, {timestamps:true}
 )
 
-//var Touring = mongoose.model("Touring", touringSchema ); 
+var Touring = mongoose.model("Touring", touringSchema ); 
 //Export Models
-module.exports = touringSchema;
+module.exports = {Touring,touringSchema};
+//module.exports = touringSchema;
