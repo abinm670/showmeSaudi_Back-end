@@ -30,14 +30,12 @@ var touringSchema = new Schema(
         title: String, 
         AboutMe: {type:String, required: true}, 
         activity:[],
-
         imageURL: String,  
         likes:{type:Number, default:0},
-        comments: [commentsSchema],
-        imageURL: String,
-        likes:{type:Number, default:0},  
+        imageURL: String,  
         comments: [commentsSchema],
         price: { type: Number, default:0 },
+    
         // location: {
         //     cityName:String, 
         //     type: pointSchema,
@@ -51,15 +49,15 @@ var userSchema = new Schema(
     {
     usrGenInfo:
     {
-
+    comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
     firstName:{type:String, required:true},
     lastName:{type:String, required:true},
         // email:{type:String, required:true}, 
-        // password: passwordPrompt()     
-    } , 
+
+    } ,
+    tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,
-    tour:{type:Boolean, default:false, required: true}, 
     touring:[touringSchema],
     img:String 
     }
