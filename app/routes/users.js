@@ -15,18 +15,18 @@ router.use(express.urlencoded());
 //create user 
 router.post('/api/newUser', (req, res) => {
 
-    if (req.body.touring.length > 0) {
-        req.body.tour = true
+    // if (req.body.touring.length > 0) {
+    //     req.body.tour = true
 
-    }
-    else {
-        req.body.tour = false
-    }
+    // }
+    // else {
+    //     req.body.tour = false
+    // }
 
 
     User.create(req.body, (error, newUser) => {
         
-        console.log(req.body.touring.length)
+      //  console.log(req.body.touring.length)
         res.json(newUser);
         
     })
@@ -64,6 +64,42 @@ router.get('/api/users', (req, res) => {
     })
 })
 
+// delete user account
+router.delete('/api/user_info/delete/:id', (req, res) =>
+{
+    User.findByIdAndRemove(req.params.id, (err, data) =>
+    {
+        if(err)
+        {
+            console.log("user not delete", err)
+        }
+        else{
+        res.redirect('/api/all_users');
+        console.log("deleted perfect")
+        }
+    })
+})
+
+//Update tour guy profile 
+router.put('/api/user_account/:u_id/profile/:id', (req, res) =>
+{
+    // set a new value of the user and profile 
+    var u_id = req.params.u_id; 
+    var p_id = req.params.id;
+    // find user in db by id
+    User.findById(u_id, (err, foundUser)=>
+    {
+        //find profile embeded in user
+        var foundProfile = foundUser.touring.id(p_id)
+        //update the profile from the requested body
+        foundProfile.title = req.body.title; 
+        //save 
+        foundProfile.save((err, savedUser) => {
+            res.json(foundProfile);
+        })
+        console.log("is good")
+    })
+})
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
