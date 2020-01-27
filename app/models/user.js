@@ -1,15 +1,8 @@
 var mongoose = require("mongoose"); 
 var Schema = mongoose.Schema;
 
-
-//Comments Schema 
-var commentsSchema = new Schema(
-    {
-        userName: String, 
-        text: String,
-        datePublishedOn:{type:Date, default:Date.now}
-    }, {timestamps:true}
-)
+const touringSchema = require('../models/touring');
+const commentsSchema = require('../models/comment');
 
 // pointSchema
 const pointSchema = new mongoose.Schema({
@@ -24,28 +17,7 @@ const pointSchema = new mongoose.Schema({
     }
   });
 
-//Touring Schema
-var touringSchema = new Schema(
-    {
-        title: String, 
-        AboutMe: {type:String, required: true}, 
-        activity:[],
-
-        imageURL: String,  
-        likes:{type:Number, default:0},
-        comments: [commentsSchema],
-        imageURL: String,
-        likes:{type:Number, default:0},  
-        comments: [commentsSchema],
-        // location: {
-        //     cityName:String, 
-        //     type: pointSchema,
-        //     required: true
-        //   } 
-    // you might have agency as a user in future.
-//         sponsored:{type:Boolean, default:false},     
-    }, {timestamps:true}
-) 
+ 
 var userSchema = new Schema(
     {
     usrGenInfo:
@@ -59,14 +31,14 @@ var userSchema = new Schema(
     address: String, 
     phone: String,
     tour:{type:Boolean, default:false, required: true},
-    touring:[touringSchema],
+    // touring:[touringSchema],
     img:String 
     }
     , {timestamps:true}
 )
+
 //manipulate data with Models 
 var User = mongoose.model("User", userSchema);
-var Touring = mongoose.model("Touring", touringSchema ); 
 
 //Export Models
-module.exports = {User, Touring}
+module.exports = User;

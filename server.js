@@ -24,8 +24,10 @@ const indexRouter = require('./app/routes/index');
 app.use(indexRouter);
 const usersRouter = require('./app/routes/users');
 app.use(usersRouter);
-
-
+// const touringRouter = require('./app/routes/tours');
+// app.use(touringRouter);
+// const commentsRouter = require('./app/routes/comments');
+// app.use(commentsRouter);
 
 //Define PORT for API to run on 
 const port = process.env.Port || 7000;

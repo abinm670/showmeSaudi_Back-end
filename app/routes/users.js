@@ -1,9 +1,10 @@
 // Require necessary NPM Packages
 const express = require('express');
 
-// Require Mongoose Model for User & Touring
-var User = require('../models/user').User
-var Touring = require('../models/user').Touring
+// Require Mongoose Model for User
+var User = require('../models/user');
+var Touring = require('../models/touring');
+var Comment = require('../models/comment');
 
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
@@ -85,7 +86,8 @@ router.post('/api/users/:userId/touring', (req, res) => {
     
     //find user in db by id and add new tourProfile
     User.findById(req.params.userId, (error, findUser) => {
-        if(findUser.tour==true){
+     
+        if(req.params.userId.tour===true){
             //store new Touring profile with data from request body
             var newTourProfile = new Touring({ title: req.body.title,AboutMe : req.body.AboutMe});
 
