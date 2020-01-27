@@ -1,8 +1,8 @@
 var mongoose = require("mongoose"); 
 var Schema = mongoose.Schema;
 
-const touringSchema = require('../models/touring');
-const commentsSchema = require('../models/comment');
+const Touring = require('./touring.js');
+const commentsSchema = require('./comment.js');
 
 // pointSchema
 const pointSchema = new mongoose.Schema({
@@ -31,7 +31,7 @@ var userSchema = new Schema(
     address: String, 
     phone: String,
     tour:{type:Boolean, default:false, required: true},
-    // touring:[touringSchema],
+    touring:Touring.obj,
     img:String 
     }
     , {timestamps:true}
