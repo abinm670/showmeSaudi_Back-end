@@ -17,17 +17,17 @@ const pointSchema = new mongoose.Schema({
     }
   });
 
- 
 var userSchema = new Schema(
     {
     usrGenInfo:
     {
-
-        firstName:{type:String, required:true},
-        lastName:{type:String, required:true},
+    comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
+    firstName:{type:String, required:true},
+    lastName:{type:String, required:true},
         // email:{type:String, required:true}, 
-        // password: passwordPrompt()
-    } , 
+
+    } ,
+    tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,
     tour:{type:Boolean, default:false, required: true},
