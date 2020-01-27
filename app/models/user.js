@@ -32,7 +32,7 @@ var userSchema = new Schema(
     phone: String,
     tour:{type:Boolean, default:false, required: true},
     touring:[Touring.obj],
-    img:String 
+    img:{type:String, required:true} 
     }
     , {timestamps:true}
 )
