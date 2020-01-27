@@ -12,41 +12,96 @@ const router = express.Router();
 router.use(express.urlencoded());
 
 
+// //create user 
+// router.post('/api/newUser', (req, res) => {
+
+//     // if (req.body.touring.length > 0) {
+//     //     req.body.tour = true
+
+//     // }
+//     // else {
+//     //     req.body.tour = false
+//     // }
+
+
+//     User.create(req.body, (error, newUser) => {
+        
+//       //  console.log(req.body.touring.length)
+//         res.json(newUser);
+        
+//     })
+// })
+
+//create user 2
+// router.post('/api/newUser', (req, res) => {
+//     User.create(req.body, (error, newUser) => {
+//         if(req.body.tour === true)
+//         {
+//               //store new Touring profile with data from request body
+//     var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
+//     //find user in db by id and add new tourProfile
+//     User.findById(req.params.userId, (error, findUser) => {
+//         findUser.touring.push(newTourProfile);
+//         findUser.save(
+//             (err, savedUser) => {
+//                 res.json(savedUser + newUser);
+//                 // console,log(savedUser)
+//             });
+//     });
+//         }else {
+//             res.json(newUser);
+//         }
+//     })
+// })
+
+//create user 3
 //create user 
 router.post('/api/newUser', (req, res) => {
-
-    // if (req.body.touring.length > 0) {
-    //     req.body.tour = true
-
-    // }
-    // else {
-    //     req.body.tour = false
-    // }
-
-
     User.create(req.body, (error, newUser) => {
-        
-      //  console.log(req.body.touring.length)
-        res.json(newUser);
-        
+    //     if(!req.body.tour)
+    //     {
+    //           //store new Touring profile with data from request body
+    // var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
+    //  res.json(newUser)
+    // //find user in db by id and add new tourProfile
+    // User.findById(req.params.userId, (error, findUser) => {
+    //     findUser.touring.push(newTourProfile);
+    //     findUser.save(
+    //         (err, savedUser) => {
+    //             res.json(savedUser);
+    //             // console,log(savedUser)
+    //         });
+    // });
+    //     }else {
+    //         res.json(newUser);
+    //     }
+    res.json(newUser);
+
     })
 })
 
 //create touring embedded in user
 router.post('/api/users/:userId/touring', (req, res) => {
-    //store new Touring profile with data from request body
-    var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
-
+    
     //find user in db by id and add new tourProfile
     User.findById(req.params.userId, (error, findUser) => {
-        findUser.touring.push(newTourProfile);
+        if(findUser.tour==true){
+            //store new Touring profile with data from request body
+            var newTourProfile = new Touring({ title: req.body.title,AboutMe : req.body.AboutMe});
+
+            findUser.touring.push(newTourProfile);
         findUser.save(
             (err, savedUser) => {
                 res.json(savedUser);
                 // console,log(savedUser)
             });
-
+        }
+        else {
+            res.send("not touring");
+        }
     });
+
+
 });
 
 // show specific user 
@@ -64,6 +119,13 @@ router.get('/api/users', (req, res) => {
     })
 })
 
+//show all tour guy
+router.get('/api/TourGuy', (req, res) => {
+    User.find({tour:"true"}, (err, foundUser) => {
+        res.send(foundUser);
+
+    })
+})
 // delete user account
 router.delete('/api/user_info/delete/:id', (req, res) =>
 {

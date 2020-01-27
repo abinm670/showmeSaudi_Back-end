@@ -37,7 +37,6 @@ var touringSchema = new Schema(
         imageURL: String,
         likes:{type:Number, default:0},  
         comments: [commentsSchema],
-        price: { type: Number, default:"Free" },
         // location: {
         //     cityName:String, 
         //     type: pointSchema,
@@ -59,7 +58,7 @@ var userSchema = new Schema(
     } , 
     address: String, 
     phone: String,
-    tour:{type:Boolean, default:false}, 
+    tour:{type:Boolean, default:false, required: true},
     touring:[touringSchema],
     img:String 
     }
