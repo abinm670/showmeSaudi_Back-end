@@ -157,11 +157,15 @@ router.put('/api/user_edit/:id', (req, res)=>{
 router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
   if(req.body.email && req.body.password){
-    User.findOne({ email: req.body.email }, (err, user) => {
-          if (err){
-            console.log(err);
-            console.log("err");
-          } else {
+    User.findOne( {email: req.body.email},(err, user) => {
+      // console.log(user.email);
+      // console.log(req.body.email);
+      // console.log(user.password);
+      // console.log(req.body.password);
+          if (!user){
+            res.status(400).json({error: "Invalid pass or email"})
+          }
+           else {
             if(req.body.email=== user.email && req.body.password=== user.password){
                   const payLoad={id:user.id};
                 
@@ -173,7 +177,8 @@ router.post('/api/login', (req, res)=>{
                 res.status(401).json({error:'Invalid pass or email'})
               }
           }
-        })
+        }
+        )
 
   }
   else{
