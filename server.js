@@ -4,7 +4,6 @@ const express = require('express');
 //mongoose required statment 
 const mongoose = require('mongoose');
 
- 
 // var Comment = require('./app/models/comments');
 
 //db require and establish the connection
@@ -24,7 +23,6 @@ const indexRouter = require('./app/routes/index');
 app.use(indexRouter);
 const usersRouter = require('./app/routes/users');
 app.use(usersRouter);
-
 
 
 //Define PORT for API to run on 
