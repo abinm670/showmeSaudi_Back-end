@@ -3,7 +3,7 @@ const jwtOption = require('./passportOptions');
 
 const jwtStrategy = passportJWT.Strategy;
 
-const testUser = {id :44 , username:"hanin" , password:"123abc"}
+// const testUser = {id :44 , username:"hanin" , password:"123abc"}
 
 //new jwtStrategy(options, verify)
 // to see if the user that send request has token & not expired
