@@ -1,16 +1,36 @@
 // Require necessary NPM Packages
 const express = require('express');
 
+var mongoose = require("mongoose");
+
+
+// fixe the DeprecationWarning:
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
+
+//require pass
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+
+const jwtOption = require('../lib/passportOptions');
+const strategy = require('../lib/passportStrategy');
+
+//strategy middleware
+passport.use(strategy);
+
 // Require Mongoose Model for User & Touring
-var User = require('../models/user');
-var Touring = require('../models/touring');
-var Comment = require('../models/comment');
+var User = require('../models/user').User
+var Touring = require('../models/user').Touring
+var Comment = require('../models/user').Comment
 
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
 // Middleware required for post
-router.use(express.urlencoded());
+// router.use(express.urlencoded());
+
 
 //create user 
 router.post('/api/newUser', (req, res) => {
@@ -18,26 +38,31 @@ router.post('/api/newUser', (req, res) => {
     // {
     //store new Touring profile with data from request body
     // var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
-    User.create(req.body)
-    .then  (newTrUser=> {
-
-        if (req.body.touring !== undefined) {
-            newTrUser.tour = true;
-            res.json(newTrUser);
-
-        }
-        else {
-          res.json(newTrUser);
-        }
-
-    }).catch((errr) =>
+    if (req.body.touring !== undefined) {
+      newuser = req.body
+      newuser.tour = true;
+      
+     
+    User.create(newuser)
+    .then  (newTuser=> {
+      res.json(newTuser);
+        
+    }).catch((err) =>
     {
-        console.log("yes you did it wrong",  errr);
+        console.log("tour user cant be created",  err);
+
     });
+  }else {
+    User.create(req.body)
+    .then (newRuser =>
+      {
+        res.json(newRuser);
+      }).catch((err)=> console.log("regular user cant be created", err))
+  }
 });
 
 // show specific user 
-router.get('/api/users/:id', (req, res) => {
+router.get('/api/user/:id', (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         res.send(foundUser)
     })
@@ -48,7 +73,8 @@ router.get('/api/users', (req, res) => {
 
     User.find()
         .then(user => {
-            res.send()
+            res.send(user)
+            console.log("okay")
 
         }).catch(err => console.log(err))
     // User.find({}, (err, foundUser) => {
@@ -58,36 +84,131 @@ router.get('/api/users', (req, res) => {
 })
 
 // delete user account
-router.delete('/api/user_info/delete/:id', (req, res) => {
+router.delete('/api/user/delete/:id', (req, res) => {
     User.findByIdAndRemove(req.params.id, (err, data) => {
         if (err) {
             console.log("user not delete", err)
         }
         else {
-            res.redirect('/api/all_users');
+            res.redirect('/api/users');
             console.log("deleted perfect")
+            
         }
     })
 })
 
 //Update tour guy profile 
-router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
+// router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
     // set a new value of the user and profile 
-    var u_id = req.params.u_id;
-    var p_id = req.params.id;
-    // find user in db by id
-    User.findById(u_id, (err, foundUser) => {
-        //find profile embeded in user
-        var foundProfile = foundUser.touring.id(p_id)
-        //update the profile from the requested body
-        foundProfile.title = req.body.title;
-        //save 
-        foundProfile.save((err, savedUser) => {
-            res.json(foundProfile);
-        })
-        console.log("is good")
-    })
+    // var u_id = req.params.u_id;
+    // var p_id = req.params.id;
+    // // find user in db by id
+    // User.findById(u_id, (err, foundUser) => {
+    //     //find profile embeded in user
+    //     var foundProfile = foundUser.touring.id(p_id)
+    //     //update the profile from the requested body
+    //     foundProfile.title = req.body.title;
+    //     //save 
+    //     foundProfile.save((err, savedUser) => {
+    //         res.json(foundProfile);
+    //     })
+    //     console.log("is good")
+    // })
+// })
+
+router.put('/api/user_edit/:id', (req, res)=>{
+  // if the tour profile is not empty then make 
+  if(req.body.touring !== undefined)
+      {
+        req.body.tour = true;  
+  User.findOneAndUpdate({_id:req.params.id}, {$set:req.body}, {new: true} )
+    .then(userUpdate => {
+       
+    res.json(userUpdate)
+      }).catch(err =>
+      {
+        console.lo("could not update tour user",err )
+      })
+    }else{
+  req.body.tour = false;  
+  User.findOneAndUpdate({_id:req.params.id}, {$set:req.body}, {new: true} )
+    .then(userUpdate => {
+       
+    res.json(userUpdate)
+      }).catch(err =>
+      {
+        console.lo("could not update reg user",err )
+      })
+      
+
+    }
+  });
+    
+    //   else{
+    //     userUpdate.tour = false;
+    //     res.json(userUpdate);
+    //   }
+    // })  
+    //   // Catch any errors that might occur
+    //   .catch(function(err) {
+    //     res.status(status).json(obj);
+    //     //res.json("cant update", err);
+    //   });
+    // })
+
+router.post('/api/login', (req, res)=>{
+  //make sure they send pass & user
+  if(req.body.email && req.body.password){
+    User.findOne( {email: req.body.email},(err, user) => {
+      // console.log(user.email);
+      // console.log(req.body.email);
+      // console.log(user.password);
+      // console.log(req.body.password);
+          if (!user){
+            res.status(400).json({error: "Invalid pass or email"})
+          }
+           else {
+            if(req.body.email=== user.email && req.body.password=== user.password){
+                  const payLoad={id:user.id};
+                
+                //create token and send it to user 
+                const token = jwt.sign(payLoad,jwtOption.secretOrKey,{expiresIn:300})
+                res.status(200).json({success:true,token:token})
+              }
+              else{
+                res.status(401).json({error:'Invalid pass or email'})
+              }
+          }
+        }
+        )
+
+  }
+  else{
+    res.status(400).json({error:'username & pass are required'})
+  }
 })
+
+router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,res)=>{
+  res.json({message:'you are authorized',
+  user:req.user
+});
+});
+
+
+router.post('/api/comment', (req, res) => {
+  Comment.create({ comment: req.body.comment, id2: req.body.id2 })
+      .then(comment => {
+          Touring.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
+              .then(user => res.json({ msg: "the comment hasbeen added " }))
+              .catch(err => res.sent(err))
+          res.send(comment)
+      })
+      .catch(err => {
+          console.log(err)
+          res.send(err)
+      })
+})
+
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
