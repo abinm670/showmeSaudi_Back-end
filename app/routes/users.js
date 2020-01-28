@@ -103,26 +103,48 @@ router.delete('/api/user_info/delete/:id', (req, res) => {
     // })
 // })
 
-router.put('/api/user_eddit/:id', (req, res)=>
-{
-  let u_id =req.params.id;
-      User.find({_id:u_id})
-      .then  (findUser =>
-      
-         { if(!findUser.tour)
-          {
-            findUser.firstName = req.body.firstName;
-            res.json(findUser)   
-            console.log(findUser.usrGenInfo);
-          }
-          else{
-              res.json("wrong ID ")
-          }
-
-      }).catch((err)=>
-      {
-          console.log("somethingwrong", err)
+router.put('/api/user_edit/:id', (req, res)=>{
+    User.findById(req.params.id).then(function(user) {
+        if(user) {
+          // Pass the result of Mongoose's `.update` method to the next `.then`
+          return user.updateOne(req.body);
+        } else {
+          // If we couldn't find a document with the matching ID
+          res.status(404).json({
+            error: {
+              name: 'DocumentNotFoundError',
+              message: 'The provided ID doesn\'t match any documents'
+            }
+          });
+        }
       })
+      .then(function() {
+        // If the update succeeded, return 204 and no JSON
+        res.status(204).end();
+      })
+      // Catch any errors that might occur
+      .catch(function(error) {
+        res.status(500).json({ error: error });
+      });
+
+//   let u_id =req.params.id;
+//       User.find({_id:u_id})
+//       .then  (findUser =>
+      
+//          { if(!findUser.tour)
+//           {
+//             findUser.firstName = req.body.firstName;
+//             res.json(findUser)   
+//             console.log(findUser.usrGenInfo);
+//           }
+//           else{
+//               res.json("wrong ID ")
+//           }
+
+//       }).catch((err)=>
+//       {
+//           console.log("somethingwrong", err)
+//       })
     
 
 })
@@ -137,34 +159,23 @@ router.post('/api/login', (req, res)=>{
   if(req.body.email && req.body.password){
     var e=req.body.email
     var p=req.body.password
-    console.log("this email",e);
-    console.log("this pass",p);
-
-    emailUser=User.findOne({ email: e }, (err, user) => {
+    User.findOne({ email: e }, (err, user) => {
           if (err){
             console.log(err);
           } else {
-            console.log(user);
+            if(req.body.email=== user.email && req.body.password=== user.password){
+                console.log("hi2");
+                  const payLoad={id:user.id};
+                
+                //create token and send it to user 
+                const token = jwt.sign(payLoad,jwtOption.secretOrKey,{expiresIn:300})
+                res.status(200).json({success:true,token:token})
+              }
+              else{
+                res.status(401).json({error:'Invalid pass or email'})
+              }
           }
         })
-    passUser=User.findOne({ password: p }, (err, user) => {
-            if (err){
-              console.log(err);
-            } else {
-              console.log(user);
-            }
-          })
-    if(req.body.email=== emailUser && req.body.password=== passUser){
-      console.log("hi2");
-        const payLoad={id:User.find({id:req.body.id})};
-      
-      //create token and send it to user 
-      const token = jwt.sign(payLoad,jwtOption.secretOrKey,{expiresIn:300})
-      res.status(200).json({success:true,token:token})
-    }
-    else{
-      res.status(401).json({error:'Invalid pass or email'})
-    }
 
   }
   else{
@@ -173,8 +184,8 @@ router.post('/api/login', (req, res)=>{
 })
 
 router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,res)=>{
-  res.json({message:'you are authorized',
-  user:req.user
+  res.json({message:'you are authorized'//,
+  //user:req.user
 });
 });
 
