@@ -47,17 +47,13 @@ var userSchema = new Schema(
     {
       email:{type:String, required:true}, 
       password:{type:String, required:true},
-    usrGenInfo:
-    {
-
-   // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
-
       firstName:{type:String, required:true},
       lastName:{type:String, required:true},
-      email:{type:String, required:true}, 
-      password:{type:String, required:true},
+  //   usrGenInfo:
+  //   {
 
-    } ,
+  //  // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
+  //   } ,
     tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,
