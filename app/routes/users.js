@@ -157,14 +157,12 @@ router.put('/api/user_edit/:id', (req, res)=>{
 router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
   if(req.body.email && req.body.password){
-    var e=req.body.email
-    var p=req.body.password
-    User.findOne({ email: e }, (err, user) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
           if (err){
             console.log(err);
+            console.log("err");
           } else {
             if(req.body.email=== user.email && req.body.password=== user.password){
-                console.log("hi2");
                   const payLoad={id:user.id};
                 
                 //create token and send it to user 
@@ -184,12 +182,11 @@ router.post('/api/login', (req, res)=>{
 })
 
 router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,res)=>{
-  res.json({message:'you are authorized'//,
-  //user:req.user
+  res.json({message:'you are authorized',
+  user:req.user
 });
 });
 
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
-
