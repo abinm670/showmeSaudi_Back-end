@@ -9,10 +9,12 @@ const mongoose = require('mongoose');
 //db require and establish the connection
 const db = require('./config/db');
 //and the establish db connection
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, 
+     useFindAndModify: false  });
 mongoose.connection.once('open', function () {
     console.log('conected to mongo');
 })
+
 
 //Instantiate Express Application Object 
 const app = express();

@@ -8,7 +8,10 @@ var Comment = require('../models/user').Comment
 
 const jwtStrategy = passportJWT.Strategy;
 
+
+
 //const testUser = {id :44 , username:"hanin" , password:"123abc"}
+
 
 //new jwtStrategy(options, verify)
 // to see if the user that send request has token & not expired

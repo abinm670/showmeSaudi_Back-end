@@ -5,9 +5,9 @@ var Schema = mongoose.Schema;
 //Comments Schema 
 var commentsSchema = new Schema(
     {
-        text: {type:String, required: [true, "can't be blank"]},
+        comment: {type:String, required: [true, "can't be blank"]},
         datePublishedOn:{type:Date, default:Date.now},
-        // userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
+
     }, {timestamps:true}
 
 )
@@ -31,10 +31,14 @@ var touringSchema = new Schema(
         AboutMe: {type:String, required: [true, "can't be blank"]}, 
         activity:[],
         likes:{type:Number, default:0},
-        img: {type:String, required: [true, "should upload image"]},  
-        comments: [commentsSchema],
-    
-        // location: {
+
+// check this latter     
+      //img: {type:String, required: [true, "should upload image"]},  
+ 
+        comments:{type : Schema.Types.ObjectId , ref: "comment"}
+
+        // will test this latter
+      //location: {
         //     cityName:String, 
         //     type: pointSchema,
         //     required: true
@@ -49,11 +53,11 @@ var userSchema = new Schema(
       password:{type:String, required: [true, "can't be blank"]},
       firstName:{type:String, required: [true, "can't be blank"]},
       lastName:{type:String, required: [true, "can't be blank"]},
-  //  // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
     tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,
     touring:[touringSchema],
+
     }
     , {timestamps:true}
 )
