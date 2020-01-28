@@ -8,7 +8,7 @@ var Comment = require('../models/user').Comment
 
 const jwtStrategy = passportJWT.Strategy;
 
-const testUser = {id :44 , username:"hanin" , password:"123abc"}
+//const testUser = {id :44 , username:"hanin" , password:"123abc"}
 
 //new jwtStrategy(options, verify)
 // to see if the user that send request has token & not expired
@@ -17,7 +17,7 @@ const strategy = new jwtStrategy(jwtOption,function(jwtPayload,done){
     console.log(`User Id: ${jwtPayload.id}`);
     console.log(`expires in : ${jwtPayload.exp}`);
 
-    User.findById({ id: jwtPayload.id }, (err, user) => {
+    User.findById({ _id: jwtPayload.id }, (err, user) => {
         if (err){
           console.log(err);
         } else {
