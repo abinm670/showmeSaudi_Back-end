@@ -110,24 +110,26 @@ router.post('/api/login', (req, res)=>{
   if(req.body.email && req.body.password){
     var e=req.body.email
     var p=req.body.password
-    console.log("this email",e);
-    console.log("this pass",p);
-
-    emailUser=User.findOne({ email: e }, (err, user) => {
+   // console.log("this email",e);
+    //console.log("this pass",p);
+    User.findOne({ email: e }, (err, user) => {
           if (err){
             console.log(err);
           } else {
-            console.log(user);
+            console.log(user.email);
+            //return user.email
           }
         })
-    passUser=User.findOne({ password: p }, (err, user) => {
+    User.findOne({ password: p }, (err, user) => {
             if (err){
               console.log(err);
             } else {
-              console.log(user);
+              console.log(user.password);
             }
           })
-    if(req.body.email=== emailUser && req.body.password=== passUser){
+         // console.log(emailUser);
+
+    if(req.body.email=== "emailUser" && req.body.password=== "passUser"){
       console.log("hi2");
         const payLoad={id:User.find({id:req.body.id})};
       
