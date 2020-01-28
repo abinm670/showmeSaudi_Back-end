@@ -164,7 +164,6 @@ router.post('/api/login', (req, res)=>{
             console.log(err);
           } else {
             if(req.body.email=== user.email && req.body.password=== user.password){
-                console.log("hi2");
                   const payLoad={id:user.id};
                 
                 //create token and send it to user 
@@ -184,6 +183,7 @@ router.post('/api/login', (req, res)=>{
 })
 
 router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,res)=>{
+  console.log("hi5")
   res.json({message:'you are authorized'//,
   //user:req.user
 });
@@ -192,4 +192,3 @@ router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
-

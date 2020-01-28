@@ -3,6 +3,6 @@ const ExtractJWT = passportJWT.ExtractJwt;
 
 const jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
-jwtOptions.secretOrKey = 'SEI_Jeddah';
+jwtOptions.secretOrKey = 'ShowMeSaudi';
 
 module.exports=jwtOptions;
