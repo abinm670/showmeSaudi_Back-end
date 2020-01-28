@@ -49,10 +49,10 @@ var touringSchema = new Schema(
 ) 
 var userSchema = new Schema(
     {
-      email:{type:String, lowercase: true, unique: [true, "this email taken"], required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid']}, 
-      password:{type:String, required: [true, "can't be blank"]},
-      firstName:{type:String, required: [true, "can't be blank"]},
-      lastName:{type:String, required: [true, "can't be blank"]},
+    email:{type:String, lowercase: true, unique: [true, "this email taken"], required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid']}, 
+    password:{type:String, required: [true, "can't be blank"]},
+    firstName:{type:String, required: [true, "can't be blank"]},
+    lastName:{type:String, required: [true, "can't be blank"]},
     tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,

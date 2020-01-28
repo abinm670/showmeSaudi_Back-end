@@ -1,8 +1,13 @@
 // Require necessary NPM Packages
 const express = require('express');
 
-var mongoose = require("mongoose"); 
-// mongoose.set('useFindAndModify', false);
+var mongoose = require("mongoose");
+
+
+// fixe the DeprecationWarning:
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 
 //require pass
@@ -112,15 +117,44 @@ router.delete('/api/user/delete/:id', (req, res) => {
 // })
 
 router.put('/api/user_edit/:id', (req, res)=>{
-    User.findOneAndUpdate({_id:req.params.id}, {$set:req.body}, {new: true} )
+  // if the tour profile is not empty then make 
+  if(req.body.touring !== undefined)
+      {
+        req.body.tour = true;  
+  User.findOneAndUpdate({_id:req.params.id}, {$set:req.body}, {new: true} )
     .then(userUpdate => {
+       
     res.json(userUpdate)
-    })  
-      // Catch any errors that might occur
-      .catch(function(err) {
-        res.json("cant update", err);
-      });
-    })
+      }).catch(err =>
+      {
+        console.lo("could not update tour user",err )
+      })
+    }else{
+  req.body.tour = false;  
+  User.findOneAndUpdate({_id:req.params.id}, {$set:req.body}, {new: true} )
+    .then(userUpdate => {
+       
+    res.json(userUpdate)
+      }).catch(err =>
+      {
+        console.lo("could not update reg user",err )
+      })
+      
+
+    }
+  });
+    
+    //   else{
+    //     userUpdate.tour = false;
+    //     res.json(userUpdate);
+    //   }
+    // })  
+    //   // Catch any errors that might occur
+    //   .catch(function(err) {
+    //     res.status(status).json(obj);
+    //     //res.json("cant update", err);
+    //   });
+    // })
 
 router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
