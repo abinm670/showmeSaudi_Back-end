@@ -5,9 +5,10 @@ var Schema = mongoose.Schema;
 //Comments Schema 
 var commentsSchema = new Schema(
     {
-        text: {type:String, required:true},
-        datePublishedOn:{type:Date, default:Date.now},
-        userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
+      text: {type:String, required:true},
+      datePublishedOn:{type:Date, default:Date.now},
+    
+       
     }, {timestamps:true}
 
 )
@@ -31,8 +32,8 @@ var touringSchema = new Schema(
         AboutMe: {type:String, required: true}, 
         activity:[],
         likes:{type:Number, default:0},
-        img: {type:String, required: true},  
-        comments: [],
+        // img: {type:String, required: true},  
+        comments:{type : Schema.Types.ObjectId , ref: "comment"}
     
         // location: {
         //     cityName:String, 
@@ -49,15 +50,10 @@ var userSchema = new Schema(
       password:{type:String, required:true},
       firstName:{type:String, required:true},
       lastName:{type:String, required:true},
-  //   usrGenInfo:
-  //   {
-
-  //  // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
-  //   } ,
-    tour:{type:Boolean, default:false},  
-    address: String, 
-    phone: String,
-    touring:[touringSchema],
+      tour:{type:Boolean, default:false},  
+      address: String, 
+      phone: String,
+      touring:[touringSchema],
     }
     , {timestamps:true}
 )

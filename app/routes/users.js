@@ -1,6 +1,10 @@
 // Require necessary NPM Packages
 const express = require('express');
 
+var mongoose = require("mongoose"); 
+// mongoose.set('useFindAndModify', false);
+
+
 //require pass
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -20,7 +24,7 @@ var Comment = require('../models/user').Comment
 const router = express.Router();
 
 // Middleware required for post
-router.use(express.urlencoded());
+// router.use(express.urlencoded());
 
 
 //create user 
@@ -29,28 +33,31 @@ router.post('/api/newUser', (req, res) => {
     // {
     //store new Touring profile with data from request body
     // var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
-    User.create(req.body)
-    .then  (newTrUser=> {
-
-        if (req.body.touring !== undefined) {
-            newTrUser.tour = true;
-            res.json(newTrUser);
-
-        }
-        else {
-            res.json(newTrUser);
-        }
-
-    }).catch((errr) =>
+    if (req.body.touring !== undefined) {
+      newuser = req.body
+      newuser.tour = true;
+      
+     
+    User.create(newuser)
+    .then  (newTuser=> {
+      res.json(newTuser);
+        
+    }).catch((err) =>
     {
-        console.log("yes you did it wrong",  errr);
+        console.log("tour user cant be created",  err);
 
     });
-
+  }else {
+    User.create(req.body)
+    .then (newRuser =>
+      {
+        res.json(newRuser);
+      }).catch((err)=> console.log("regular user cant be created", err))
+  }
 });
 
 // show specific user 
-router.get('/api/users/:id', (req, res) => {
+router.get('/api/user/:id', (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         res.send(foundUser)
     })
@@ -72,14 +79,15 @@ router.get('/api/users', (req, res) => {
 })
 
 // delete user account
-router.delete('/api/user_info/delete/:id', (req, res) => {
+router.delete('/api/user/delete/:id', (req, res) => {
     User.findByIdAndRemove(req.params.id, (err, data) => {
         if (err) {
             console.log("user not delete", err)
         }
         else {
-            res.redirect('/api/all_users');
+            res.redirect('/api/users');
             console.log("deleted perfect")
+            
         }
     })
 })
@@ -103,69 +111,28 @@ router.delete('/api/user_info/delete/:id', (req, res) => {
     // })
 // })
 
-// router.put('/api/user_edit/:id', (req, res)=>{
-//     User.findById(req.params.id).then(function(user) {
-//         if(user) {
-//           // Pass the result of Mongoose's `.update` method to the next `.then`
-//           return user.updateOne(req.body);
-//         } else {
-//           // If we couldn't find a document with the matching ID
-//           res.status(404).json({
-//             error: {
-//               name: 'DocumentNotFoundError',
-//               message: 'The provided ID doesn\'t match any documents'
-//             }
-//           });
-//         }
-//       })
-//       .then(function() {
-//         // If the update succeeded, return 204 and no JSON
-//         res.status(204).end();
-//       })
-//       // Catch any errors that might occur
-//       .catch(function(error) {
-//         res.status(500).json({ error: error });
-//       });
-
-//   let u_id =req.params.id;
-//       User.find({_id:u_id})
-//       .then  (findUser =>
-      
-//          { if(!findUser.tour)
-//           {
-//             findUser.firstName = req.body.firstName;
-//             res.json(findUser)   
-//             console.log(findUser.usrGenInfo);
-//           }
-//           else{
-//               res.json("wrong ID ")
-//           }
-
-//       }).catch((err)=>
-//       {
-//           console.log("somethingwrong", err)
-//       })
-    
-
-// })
-
-
-
-////////
-// const testUser = {id :44 , username:"hanin" , password:"123abc"}
+router.put('/api/user_edit/:id', (req, res)=>{
+    User.findOneAndUpdate({_id:req.params.id}, {$set:req.body}, {new: true} )
+    .then(userUpdate => {
+    res.json(userUpdate)
+    })  
+      // Catch any errors that might occur
+      .catch(function(err) {
+        res.json("cant update", err);
+      });
+    })
 
 router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
   if(req.body.email && req.body.password){
-    var e=req.body.email
-    var p=req.body.password
 
-    User.findOne({ email: e }, (err, user) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
+
           if (err){
             console.log(err);
+            console.log("err");
           } else {
             if(req.body.email=== user.email && req.body.password=== user.password){
-                console.log("hi2");
                   const payLoad={id:user.id};
                 
                 //create token and send it to user 
@@ -185,17 +152,17 @@ router.post('/api/login', (req, res)=>{
 })
 
 router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,res)=>{
-  res.json({message:'you are authorized'//,
-  //user:req.user
+  res.json({message:'you are authorized',
+  user:req.user
 });
 });
 
 
 
-router.post("/comment", (req, res) => {
+router.post('/api/comment', (req, res) => {
   Comment.create({ comment: req.body.comment, id2: req.body.id2 })
       .then(comment => {
-          User.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
+          Touring.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
               .then(user => res.json({ msg: "the comment hasbeen added " }))
               .catch(err => res.sent(err))
           res.send(comment)
@@ -210,4 +177,3 @@ router.post("/comment", (req, res) => {
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
-
