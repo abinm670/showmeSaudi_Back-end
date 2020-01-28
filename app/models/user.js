@@ -5,11 +5,11 @@ var Schema = mongoose.Schema;
 //Comments Schema 
 var commentsSchema = new Schema(
     {
-        userName: String, 
-        text: String,
-        datePublishedOn:{type:Date, default:Date.now}
-    }, 
-    {timestamps:true}
+        text: {type:String, required:true},
+        datePublishedOn:{type:Date, default:Date.now},
+        // userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
+    }, {timestamps:true}
+
 )
 
 // pointSchema
@@ -49,10 +49,14 @@ var userSchema = new Schema(
       password:{type:String, required:true},
     usrGenInfo:
     {
+
    // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
-      //firstName:{type:String, required:true},
-      //lastName:{type:String, required:true},
-      
+
+      firstName:{type:String, required:true},
+      lastName:{type:String, required:true},
+      email:{type:String, required:true}, 
+      password:{type:String, required:true},
+
     } ,
     tour:{type:Boolean, default:false},  
     address: String, 
