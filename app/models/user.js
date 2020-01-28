@@ -6,8 +6,9 @@ var Schema = mongoose.Schema;
 var commentsSchema = new Schema(
     {
         userName: String, 
-        text: String,
-        datePublishedOn:{type:Date, default:Date.now}
+        text: {type:String, required:true},
+        datePublishedOn:{type:Date, default:Date.now},
+        // userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
     }, {timestamps:true}
 )
 
@@ -49,7 +50,7 @@ var userSchema = new Schema(
     {
     usrGenInfo:
     {
-    comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
+   
     firstName:{type:String, required:true},
     lastName:{type:String, required:true},
         // email:{type:String, required:true}, 

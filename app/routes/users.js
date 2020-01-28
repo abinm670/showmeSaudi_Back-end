@@ -52,7 +52,8 @@ router.get('/api/users', (req, res) => {
 
     User.find()
         .then(user => {
-            res.send()
+            res.send(user)
+            console.log("okay")
 
         }).catch(err => console.log(err))
     // User.find({}, (err, foundUser) => {
@@ -75,23 +76,50 @@ router.delete('/api/user_info/delete/:id', (req, res) => {
 })
 
 //Update tour guy profile 
-router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
+// router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
     // set a new value of the user and profile 
-    var u_id = req.params.u_id;
-    var p_id = req.params.id;
-    // find user in db by id
-    User.findById(u_id, (err, foundUser) => {
-        //find profile embeded in user
-        var foundProfile = foundUser.touring.id(p_id)
-        //update the profile from the requested body
-        foundProfile.title = req.body.title;
-        //save 
-        foundProfile.save((err, savedUser) => {
-            res.json(foundProfile);
-        })
-        console.log("is good")
-    })
-})
+    // var u_id = req.params.u_id;
+    // var p_id = req.params.id;
+    // // find user in db by id
+    // User.findById(u_id, (err, foundUser) => {
+    //     //find profile embeded in user
+    //     var foundProfile = foundUser.touring.id(p_id)
+    //     //update the profile from the requested body
+    //     foundProfile.title = req.body.title;
+    //     //save 
+    //     foundProfile.save((err, savedUser) => {
+    //         res.json(foundProfile);
+    //     })
+    //     console.log("is good")
+    // })
+// })
+
+// router.put('/api/user_eddit/:id', (req, res)=>
+// {
+//   let u_id =req.params.id;
+//       User.find({_id:u_id})
+//       .then  (findUser =>
+      
+//          { if(!findUser.tour)
+//           {
+//             //findUser.firstName = req.body[0].firstName;
+//             res.json(findUser)   
+//             console.log(findUser.usrGenInfo);
+//           }
+//           else{
+//               res.json("wrong ID ")
+//           }
+
+//       }).catch((err)=>
+//       {
+//           console.log("somethingwrong", err)
+//       })
+    
+
+// })
+
+
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
+
