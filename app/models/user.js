@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 //Comments Schema 
 var commentsSchema = new Schema(
     {
-        text: {type:String, required:true},
+        text: {type:String, required: [true, "can't be blank"]},
         datePublishedOn:{type:Date, default:Date.now},
         // userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
     }, {timestamps:true}
@@ -28,10 +28,10 @@ const pointSchema = new mongoose.Schema({
 //Touring Schema
 var touringSchema = new Schema(
     {
-        AboutMe: {type:String, required: true}, 
+        AboutMe: {type:String, required: [true, "can't be blank"]}, 
         activity:[],
         likes:{type:Number, default:0},
-        img: {type:String, required: true},  
+        img: {type:String, required: [true, "should upload image"]},  
         comments: [commentsSchema],
     
         // location: {
@@ -45,15 +45,11 @@ var touringSchema = new Schema(
 ) 
 var userSchema = new Schema(
     {
-      email:{type:String, required:true}, 
-      password:{type:String, required:true},
-      firstName:{type:String, required:true},
-      lastName:{type:String, required:true},
-  //   usrGenInfo:
-  //   {
-
+      email:{type:String, lowercase: true, unique: [true, "this email taken"], required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid']}, 
+      password:{type:String, required: [true, "can't be blank"]},
+      firstName:{type:String, required: [true, "can't be blank"]},
+      lastName:{type:String, required: [true, "can't be blank"]},
   //  // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
-  //   } ,
     tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,
