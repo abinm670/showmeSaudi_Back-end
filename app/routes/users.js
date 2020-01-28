@@ -149,19 +149,11 @@ router.put('/api/user_edit/:id', (req, res)=>{
 
 })
 
-
-
 ////////
-// const testUser = {id :44 , username:"hanin" , password:"123abc"}
-
 router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
   if(req.body.email && req.body.password){
     User.findOne( {email: req.body.email},(err, user) => {
-      // console.log(user.email);
-      // console.log(req.body.email);
-      // console.log(user.password);
-      // console.log(req.body.password);
           if (!user){
             res.status(400).json({error: "Invalid pass or email"})
           }
@@ -179,7 +171,6 @@ router.post('/api/login', (req, res)=>{
           }
         }
         )
-
   }
   else{
     res.status(400).json({error:'username & pass are required'})
