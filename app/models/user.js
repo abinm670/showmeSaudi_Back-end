@@ -8,7 +8,8 @@ var commentsSchema = new Schema(
         userName: String, 
         text: String,
         datePublishedOn:{type:Date, default:Date.now}
-    }, {timestamps:true}
+    }, 
+    {timestamps:true}
 )
 
 // pointSchema
@@ -27,14 +28,11 @@ const pointSchema = new mongoose.Schema({
 //Touring Schema
 var touringSchema = new Schema(
     {
-        title: String, 
         AboutMe: {type:String, required: true}, 
         activity:[],
-        imageURL: String,  
         likes:{type:Number, default:0},
-        imageURL: String,  
+        img: {type:String, required: true},  
         comments: [commentsSchema],
-        price: { type: Number, default:0 },
     
         // location: {
         //     cityName:String, 
@@ -49,23 +47,23 @@ var userSchema = new Schema(
     {
     usrGenInfo:
     {
-    comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
-    firstName:{type:String, required:true},
-    lastName:{type:String, required:true},
-        // email:{type:String, required:true}, 
-
+   // comments : [{type : Schema.Types.ObjectId , ref: "comment"}],
+      firstName:{type:String, required:true},
+      lastName:{type:String, required:true},
+      email:{type:String, required:true}, 
+      password:{type:String, required:true},
     } ,
     tour:{type:Boolean, default:false},  
     address: String, 
     phone: String,
     touring:[touringSchema],
-    img:String 
     }
     , {timestamps:true}
 )
 //manipulate data with Models 
 var User = mongoose.model("User", userSchema);
 var Touring = mongoose.model("Touring", touringSchema ); 
+var Comment = mongoose.model("Comment", commentsSchema ); 
 
 //Export Models
-module.exports = {User, Touring}
+module.exports = {User, Touring,Comment}
