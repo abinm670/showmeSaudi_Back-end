@@ -7,7 +7,7 @@ var commentsSchema = new Schema(
     {
         text: {type:String, required:true},
         datePublishedOn:{type:Date, default:Date.now},
-        // userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
+        userCommented:{type : Schema.Types.ObjectId , ref: "comment"}
     }, {timestamps:true}
 
 )
@@ -32,7 +32,7 @@ var touringSchema = new Schema(
         activity:[],
         likes:{type:Number, default:0},
         img: {type:String, required: true},  
-        comments: [commentsSchema],
+        comments: [],
     
         // location: {
         //     cityName:String, 

@@ -140,27 +140,15 @@ router.post('/api/login', (req, res)=>{
     console.log("this email",e);
     console.log("this pass",p);
 
-    emailUser=User.findOne({ email: e }, (err, user) => {
-          if (err){
-            console.log(err);
-          } else {
-            console.log(user);
-          }
-        })
-    passUser=User.findOne({ password: p }, (err, user) => {
-            if (err){
-              console.log(err);
-            } else {
-              console.log(user);
-            }
-          })
-    if(req.body.email=== emailUser && req.body.password=== passUser){
-      console.log("hi2");
-        const payLoad={id:User.find({id:req.body.id})};
-      
-      //create token and send it to user 
-      const token = jwt.sign(payLoad,jwtOption.secretOrKey,{expiresIn:300})
-      res.status(200).json({success:true,token:token})
+    User.findOne({ email: e }, (err, user) => {
+
+
+if(req.body.email=== emailUser && req.body.password=== passUser){
+    console.log("hi2");
+    const payLoad={id:User.find({id:req.body.id})};
+    //create token and send it to user 
+    const token = jwt.sign(payLoad,jwtOption.secretOrKey,{expiresIn:300})
+    res.status(200).json({success:true,token:token})
     }
     else{
       res.status(401).json({error:'Invalid pass or email'})
