@@ -89,6 +89,15 @@ router.get('/api/users', (req, res) => {
   // })
 })
 
+//show all tourGuys
+router.get('/api/tourGuys', (req, res) => {
+  User.find({tourType:"tourUser"})
+    .then(user => {
+      res.send(user)
+      console.log("tourGuys")
+    }).catch(err => console.log(err))
+})
+
 // delete user account
 router.delete('/api/user/delete/:id', (req, res) => {
   User.findByIdAndRemove(req.params.id, (err, data) => {
@@ -98,7 +107,6 @@ router.delete('/api/user/delete/:id', (req, res) => {
     else {
       res.redirect('/api/users');
       console.log("deleted perfect")
-
     }
   })
 })
@@ -132,7 +140,6 @@ router.put('/api/user_edit/:id', (req, res) => {
     req.body.tourType = "tourGuy";
     User.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
       .then(userUpdate => {
-
         res.json(userUpdate)
       }).catch(err => {
         console.log("could not update tour user", err)
@@ -141,13 +148,10 @@ router.put('/api/user_edit/:id', (req, res) => {
     req.body.tour = false;
     User.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
       .then(userUpdate => {
-
         res.json(userUpdate)
       }).catch(err => {
         console.log("could not update reg user", err)
       })
-
-
   }
 });
 
@@ -164,11 +168,9 @@ router.post('/api/login', (req, res) => {
       else {
         if (req.body.email === user.email && req.body.password === user.password) {
           const payLoad = { id: user.id };
-
           //create token and send it to user 
           const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 300 })
           res.status(200).json({ success: true, token: token })
-
         }
         else {
           res.status(401).json({ error: 'Invalid pass or email' })
@@ -243,9 +245,22 @@ router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
   Booking.find({$or:[{ tourGuy: req.user._id },{ regUser: req.user._id }]})
   .then(books => {
     res.send(books)
-    console.log("all book")
+    console.log("all book for"+req.user._id)
   }).catch(err => console.log(err)) 
 })
+
+// cancel booking
+router.delete('/api/booking/delete/:id', (req, res) => {
+  Booking.findByIdAndRemove(req.params.id, (err, book) => {
+    if (err) {
+      console.log("booking not cancel", err)
+    }
+    else {
+      res.redirect('/');
+      console.log("perfect cancel booking")
+    }
+  }); 
+});
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
