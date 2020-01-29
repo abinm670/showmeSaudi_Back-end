@@ -3,16 +3,12 @@ const express = require('express');
 var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
-///for image
+
+//image Upload 
 const multer = require('multer');
-const middlewares = require('./middlewares');
-
+// img guidLine info
+const middlewares = require('../models/middlewares');
 const path = require('path');
-
-
-
-
-
 
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
@@ -31,25 +27,17 @@ const strategy = require('../lib/passportStrategy');
 passport.use(strategy);
 
 // Require Mongoose Model for User & Touring
-var User = require('../models/user').User
-var Comment = require('../models/user').Comment
+var TourUser  = require('../models/tourUser')
+var Comment = require('../models/comment')
 
 // Middleware required for post
 // router.use(express.urlencoded());
 
 
-//create user 
-router.post('/api/newUser', middlewares.upload.single('tourGuyImg'), (req, res) => {
-  // if(req.body.touring[1])
-  // {
-  //store new Touring profile with data from request body
-  // var newTourProfile = new Touring({ newTourProfile: req.body.newTourProfile });
-  if (req.body.tourGuy !== undefined) {
-    newuser = req.body
-    newuser.tourType = "tourUser";
-    // newuser.tourGuyImg = req.file.path
-
-    User.create(newuser)
+//create tourUser 
+router.post('/api/newTuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
+ 
+  TourUser.create(req.body)
       .then(newTuser => {
         res.json(newTuser);
 
@@ -57,25 +45,21 @@ router.post('/api/newUser', middlewares.upload.single('tourGuyImg'), (req, res) 
         console.log("tour user cant be created", err);
 
       });
-  } else {
-    User.create(req.body)
-      .then(newRuser => {
-        res.json(newRuser);
-      }).catch((err) => console.log("regular user cant be created", err))
-  }
-});
+    });
+  
+      
 
 // show specific user 
-router.get('/api/user/:id', (req, res) => {
-  User.findById(req.params.id, (err, foundUser) => {
+router.get('/api/t-user/:id', (req, res) => {
+  TourUser.findById(req.params.id, (err, foundUser) => {
     res.send(foundUser)
   })
 })
 
 //show all user
-router.get('/api/users', (req, res) => {
+router.get('/api/t-users', (req, res) => {
 
-  User.find()
+  TourUser.find()
     .then(user => {
       res.send(user)
       console.log("okay")
@@ -88,8 +72,8 @@ router.get('/api/users', (req, res) => {
 })
 
 // delete user account
-router.delete('/api/user/delete/:id', (req, res) => {
-  User.findByIdAndRemove(req.params.id, (err, data) => {
+router.delete('/api/t-user/delete/:id', (req, res) => {
+  TourUser.findByIdAndRemove(req.params.id, (err, data) => {
     if (err) {
       console.log("user not delete", err)
     }
@@ -122,37 +106,27 @@ router.delete('/api/user/delete/:id', (req, res) => {
 
 
 // edit - complete
-router.put('/api/user_edit/:id', (req, res) => {
-  // if the tour profile is not empty then make 
-  if (req.body.tourGuy !== undefined) {
-    req.body.tourType = "tourGuy";
-    User.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
+router.put('/api/t-user_edit/:id', (req, res) => {
+  
+  TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
       .then(userUpdate => {
 
         res.json(userUpdate)
       }).catch(err => {
         console.log("could not update tour user", err)
-      })
-  } else {
-    req.body.tour = false;
-    User.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
-      .then(userUpdate => {
-
-        res.json(userUpdate)
-      }).catch(err => {
-        console.log("could not update reg user", err)
-      })
+      });
+ 
 
 
-  }
-});
+  })
+
 
 
 //Loging ---- Completed     
-router.post('/api/login', (req, res) => {
+router.post('/api/t-login', (req, res) => {
   //make sure they send pass & user
   if (req.body.email && req.body.password) {
-    User.findOne({ email: req.body.email }, (err, user) => {
+    TourUser.findOne({ email: req.body.email }, (err, user) => {
       if (!user) {
         res.status(400).json({ error: "Invalid pass or email" })
       }
@@ -189,19 +163,21 @@ router.post('/api/comment', (req, res) => {
   Comment.create({ comment: req.body.comment, id2: req.body.id2 })
     .then(comment => {
       console.log(comment)
-      console.log(User)
+      console.log(res)
       //  { $pash: { comments: comment._id }
-      User.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
+      TourUser.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
         .then(user => {
           console.log(user)
           res.json({ msg: "the comment has been added " })
+          console.log(comments)
+
         })
-        .catch(err => res.sent(err))
+        .catch(err => res.json(err))
       // res.send(comment)
     })
     .catch(err => {
-      // console.log(err)
-      res.send(err)
+      console.log(err)
+      // res.send(err)
     })
 })
 

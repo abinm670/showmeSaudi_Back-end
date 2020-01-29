@@ -26,8 +26,15 @@ app.use(express.json());
 // require route 
 const indexRouter = require('./app/routes/index');
 app.use(indexRouter);
-const usersRouter = require('./app/routes/users');
-app.use(usersRouter);
+
+//tour user
+const tourUserRouter = require('./app/routes/tourUser');
+app.use(tourUserRouter);
+
+//regUser
+const regUserRouter = require('./app/routes/regUser');
+app.use(regUserRouter);
+
 //app.use(express.static(__dirname));
 
 app.use('/uploads', express.static('uploads'));
