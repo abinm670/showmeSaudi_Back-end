@@ -1,8 +1,41 @@
 // Require necessary NPM Packages
 const express = require('express');
-
 var mongoose = require("mongoose");
+// Instantiate a Router (mini app that only handles routes)
+const router = express.Router();
+///for image
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+    //cb call back function
+  destination: function (req,file,cb){
+    // make uploads folder to store img
+    cb(null, './uploads/');
+  },
+  filename: function(req,file,cb){
+    cb(null,  Date.now()+file.originalname);
+  }
+});
+
+const fileFilter=(req,file,cb)=>{
+  //file not accept if this false
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+    //accept
+    cb(null,true);
+  }
+  else{
+    //reject
+    cb(null,false);
+  }
+}
+
+const upload = multer({
+  storage:storage,
+  limits:{
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter:fileFilter
+})
 
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
@@ -25,15 +58,12 @@ var User = require('../models/user').User
 var Touring = require('../models/user').Touring
 var Comment = require('../models/user').Comment
 
-// Instantiate a Router (mini app that only handles routes)
-const router = express.Router();
-
 // Middleware required for post
 // router.use(express.urlencoded());
 
 
 //create user 
-router.post('/api/newUser', (req, res) => {
+router.post('/api/newUser', upload.single('tourGuyImg'), (req, res) => {
     // if(req.body.touring[1])
     // {
     //store new Touring profile with data from request body
@@ -41,7 +71,7 @@ router.post('/api/newUser', (req, res) => {
     if (req.body.touring !== undefined) {
       newuser = req.body
       newuser.tour = true;
-      
+      newuser.tourGuyImg=req.file.path
      
     User.create(newuser)
     .then  (newTuser=> {
@@ -127,7 +157,7 @@ router.put('/api/user_edit/:id', (req, res)=>{
     res.json(userUpdate)
       }).catch(err =>
       {
-        console.lo("could not update tour user",err )
+        console.log("could not update tour user",err )
       })
     }else{
   req.body.tour = false;  
@@ -137,7 +167,7 @@ router.put('/api/user_edit/:id', (req, res)=>{
     res.json(userUpdate)
       }).catch(err =>
       {
-        console.lo("could not update reg user",err )
+        console.log("could not update reg user",err )
       })
       
 
@@ -160,10 +190,6 @@ router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
   if(req.body.email && req.body.password){
     User.findOne( {email: req.body.email},(err, user) => {
-      // console.log(user.email);
-      // console.log(req.body.email);
-      // console.log(user.password);
-      // console.log(req.body.password);
           if (!user){
             res.status(400).json({error: "Invalid pass or email"})
           }
@@ -199,7 +225,7 @@ router.post('/api/comment', (req, res) => {
   Comment.create({ comment: req.body.comment, id2: req.body.id2 })
       .then(comment => {
           Touring.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
-              .then(user => res.json({ msg: "the comment hasbeen added " }))
+              .then(user => res.json({ msg: "the comment has been added " }))
               .catch(err => res.sent(err))
           res.send(comment)
       })

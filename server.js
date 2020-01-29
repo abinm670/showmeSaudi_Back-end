@@ -25,7 +25,7 @@ const indexRouter = require('./app/routes/index');
 app.use(indexRouter);
 const usersRouter = require('./app/routes/users');
 app.use(usersRouter);
-
+// app.use('/uploads', express.static('uploads'));
 //Define PORT for API to run on 
 const port = process.env.Port || 7000;
 

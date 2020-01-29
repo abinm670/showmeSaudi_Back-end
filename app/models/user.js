@@ -33,7 +33,7 @@ var touringSchema = new Schema(
         likes:{type:Number, default:0},
 
 // check this latter     
-      //img: {type:String, required: [true, "should upload image"]},  
+      tourGuyImg: {type:String, required: [true, "should upload image"]},  
  
         comments:{type : Schema.Types.ObjectId , ref: "comment"}
 
