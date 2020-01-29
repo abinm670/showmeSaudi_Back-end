@@ -232,11 +232,19 @@ router.post('/api/booking/:tourguyId', passport.authenticate('jwt'), (req, res) 
           const regUserb = Ruser
           console.log(req.user._id + "req.user._id")
           Booking.create({ tourGuy: tourguyb, regUser: regUserb })
-            .then(book => res.send("book is made "))
+            .then(book => res.send("Book is made successfully"))
         })
 
     })
+})
 
+//get all booking
+router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
+  Booking.find({$or:[{ tourGuy: req.user._id },{ regUser: req.user._id }]})
+  .then(books => {
+    res.send(books)
+    console.log("all book")
+  }).catch(err => console.log(err)) 
 })
 
 // Export the Router so we can use it in the server.js file

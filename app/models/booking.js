@@ -17,16 +17,4 @@ const bookingSchema = new Schema(
 );
 
 module.exports=mongoose.model('Booking',bookingSchema);
-// bookings{
-//     tourGuy{
-//         email
-//     }
-// }
-
-// bookTourGuy{
-//     //which regular user made booking
-//     user{
-//         email
-//     }
-// }
 
