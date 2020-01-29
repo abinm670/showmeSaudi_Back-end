@@ -116,6 +116,8 @@ router.delete('/api/user/delete/:id', (req, res) => {
     // })
 // })
 
+
+// edit - complete
 router.put('/api/user_edit/:id', (req, res)=>{
   // if the tour profile is not empty then make 
   if(req.body.touring !== undefined)
@@ -156,6 +158,7 @@ router.put('/api/user_edit/:id', (req, res)=>{
     //   });
     // })
 
+//Loging ---- Completed     
 router.post('/api/login', (req, res)=>{
   //make sure they send pass & user
   if(req.body.email && req.body.password){
@@ -194,7 +197,7 @@ router.get('/api/protected', passport.authenticate('jwt',{session:false}), (req,
 });
 });
 
-
+// write a comment on tour guy profile
 router.post('/api/comment', (req, res) => {
   Comment.create({ comment: req.body.comment, id2: req.body.id2 })
       .then(comment => {
