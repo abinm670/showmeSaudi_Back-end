@@ -36,8 +36,15 @@ var touringSchema = new Schema(
     // comments:[],
    
 
+
+// check this latter     
+      tourGuyImg: {type:String, required: [true, "should upload image"]},  
+ 
+        comments:{type : Schema.Types.ObjectId , ref: "comment"}
+
     // check this latter     
     //img: {type:String, required: [true, "should upload image"]},  
+
 
 
 
@@ -73,4 +80,4 @@ var Touring = mongoose.model("Touring", touringSchema);
 var Comment = mongoose.model("Comment", commentsSchema);
 
 //Export Models
-module.exports = { User, Touring, Comment }
+module.exports = {User, Touring,Comment}
