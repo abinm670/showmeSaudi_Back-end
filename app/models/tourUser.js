@@ -10,11 +10,11 @@ var tourUserSchema = new Schema(
     password: { type: String, required: [true, "can't be blank"] },
     firstName: { type: String, required: [true, "can't be blank"] },
     lastName: { type: String, required: [true, "can't be blank"] },
-    tourType: { type: String, default: "regUser" },
+    tourType: { type: String, default: "tour user" },
     address: String,
     phone: String,
-    // img: {type:String, required: [true, "should upload image"]},
-    comments: [{ type: Schema.Types.ObjectId, ref: "comment" }],
+    img: {type:String, required: [true, "should upload image"]},
+    comment: [{ type: Schema.Types.ObjectId, ref: "comment" }],
     tourGuy: {
     AboutMe: { type: String },
     package: [{
