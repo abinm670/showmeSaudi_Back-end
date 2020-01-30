@@ -42,7 +42,7 @@ router.use(express.urlencoded());
 
 //create RegUser 
 router.post('/api/newRuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
-
+  console.log(req.body)
   RegUser.create(req.body)
     .then(newTuser => {
       res.json(newTuser);
@@ -138,7 +138,7 @@ router.post('/api/r-login', (req, res) => {
       }
       else {
         if (req.body.email === user.email && req.body.password === user.password) {
-          const payLoad = { id: user.id };
+          const payLoad = { user: user };
 
           //create token and send it to user 
           const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
