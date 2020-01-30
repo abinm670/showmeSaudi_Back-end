@@ -27,18 +27,19 @@ const strategy = require('../lib/passportStrategy');
 passport.use(strategy);
 
 // Require Mongoose Model for User & Touring
+
+var Booking = require('../models/booking');
 var TourUser  = require('../models/tourUser')
 var Comment = require('../models/comment')
 
 // Middleware required for post
 // router.use(express.urlencoded());
 
-
 //create tourUser 
 router.post('/api/newTuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
  
   TourUser.create(req.body)
-      .then(newTuser => {
+     .then(newTuser => {
         res.json(newTuser);
 
       }).catch((err) => {
@@ -47,8 +48,6 @@ router.post('/api/newTuser', middlewares.upload.single('tourGuyImg'), (req, res)
       });
     });
   
-      
-
 // show specific user 
 router.get('/api/t-user/:id', (req, res) => {
   TourUser.findById(req.params.id, (err, foundUser) => {
@@ -65,10 +64,16 @@ router.get('/api/t-users', (req, res) => {
       console.log("okay")
 
     }).catch(err => console.log(err))
-  // User.find({}, (err, foundUser) => {
-  //     res.send(foundUser);
 
-  // })
+})
+
+//show all tourGuys
+router.get('/api/tourGuys', (req, res) => {
+  User.find({tourType:"tourUser"})
+    .then(user => {
+      res.send(user)
+      console.log("tourGuys")
+    }).catch(err => console.log(err))
 })
 
 // delete user account
@@ -80,7 +85,6 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
     else {
       res.redirect('/api/users');
       console.log("deleted perfect")
-
     }
   })
 })
@@ -101,8 +105,10 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
 //         res.json(foundProfile);
 //     })
 //     console.log("is good")
+
 // })
 // })
+
 
 
 // edit - complete
@@ -110,14 +116,12 @@ router.put('/api/t-user_edit/:id', (req, res) => {
   
   TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
       .then(userUpdate => {
-
         res.json(userUpdate)
       }).catch(err => {
         console.log("could not update tour user", err)
+
+  
       });
- 
-
-
   })
 
 
@@ -133,9 +137,8 @@ router.post('/api/t-login', (req, res) => {
       else {
         if (req.body.email === user.email && req.body.password === user.password) {
           const payLoad = { id: user.id };
-
           //create token and send it to user 
-          const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 300 })
+          const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
           res.status(200).json({ success: true, token: token })
         }
         else {
@@ -162,6 +165,15 @@ router.get('/api/protected', passport.authenticate('jwt', { session: false }), (
 router.post('/api/comment', (req, res) => {
   Comment.create({ comment: req.body.comment, id2: req.body.id2 })
     .then(comment => {
+
+    //   Touring.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
+    //     .then(user => res.json({ msg: "the comment has been added " }))
+    //     .catch(err => res.sent(err))
+    //   res.send(comment)
+    // })
+    // .catch(err => {
+    //   console.log(err)
+
       console.log(comment)
       console.log(res)
       //  { $pash: { comments: comment._id }
@@ -181,6 +193,31 @@ router.post('/api/comment', (req, res) => {
     })
 })
 
+
+
+
+//get all booking
+router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
+  Booking.find( {tourGuy: req.user._id})
+  .then(books => {
+    res.send(books)
+  
+    console.log("all book for"+req.user._id)
+  }).catch(err => console.log(err)) 
+})
+
+// cancel booking
+router.delete('/api/booking/delete/:id', (req, res) => {
+  Booking.findByIdAndRemove(req.params.id, (err, book) => {
+    if (err) {
+      console.log("booking not cancel", err)
+    }
+    else {
+      res.redirect('/');
+      console.log("perfect cancel booking")
+    }
+  }); 
+});
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
