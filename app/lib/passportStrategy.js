@@ -7,7 +7,6 @@ var regUser = require('../models/regUser')
 var tourUser = require('../models/tourUser')
 
 
-
 const jwtStrategy = passportJWT.Strategy;
 
 //new jwtStrategy(options, verify)

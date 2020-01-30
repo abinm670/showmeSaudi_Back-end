@@ -10,8 +10,6 @@ const multer = require('multer');
 const middlewares = require('../models/middlewares');
 const path = require('path');
 
-
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -30,33 +28,26 @@ passport.use(strategy);
 
 // Require Mongoose Model for User & Touring
 
+var Booking = require('../models/booking');
 var TourUser  = require('../models/tourUser')
 var Comment = require('../models/comment')
-var Booking = require('../models/booking');
-
 
 // Middleware required for post
 // router.use(express.urlencoded());
-
-
 
 //create tourUser 
 router.post('/api/newTuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
  
   TourUser.create(req.body)
-
-      .then(newTuser => {
+     .then(newTuser => {
         res.json(newTuser);
 
       }).catch((err) => {
         console.log("tour user cant be created", err);
 
       });
-
     });
   
-      
-
 // show specific user 
 router.get('/api/t-user/:id', (req, res) => {
   TourUser.findById(req.params.id, (err, foundUser) => {
@@ -129,13 +120,9 @@ router.put('/api/t-user_edit/:id', (req, res) => {
       }).catch(err => {
         console.log("could not update tour user", err)
 
+  
       });
- 
-
-
   })
-
-
 
 
 
