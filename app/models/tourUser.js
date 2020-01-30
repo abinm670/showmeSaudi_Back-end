@@ -2,17 +2,9 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 //Comments Schema 
-var commentsSchema = new Schema(
-  {
-    comment: { type: String, required: [true, "can't be blank"] },
-    datePublishedOn: { type: Date, default: Date.now },
-    id2: String
+const Comment = require('./comment.js').commentsSchema;
 
-  }, { timestamps: true }
-
-)
-
-var userSchema = new Schema(
+var tourUserSchema = new Schema(
   {
     email: { type: String, lowercase: true, unique: [true, "this email taken"], required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'] },
     password: { type: String, required: [true, "can't be blank"] },
@@ -22,30 +14,29 @@ var userSchema = new Schema(
     address: String,
     phone: String,
     // img: {type:String, required: [true, "should upload image"]},
-
-    // second user 
     comments: [{ type: Schema.Types.ObjectId, ref: "comment" }],
     tourGuy: {
-      AboutMe: { type: String },
-      package: [{
-        packName: { type: String },
+    AboutMe: { type: String },
+    package: [{
+    packName: { type: String },
         // {packImg: {type:String, required: [true, "should upload image"]}},
-        description: { type: String },
+    description: { type: String },
       }],
       likes: { type: Number, default: 0 },
 
       price: { type: String, default: "free" }
     },
+    
     //  {timestamps: true }
   })
 
 
 //manipulate data with Models 
-var User = mongoose.model("User", userSchema);
-var Comment = mongoose.model("Comment", commentsSchema);
+var TourUser = mongoose.model("tourUser", tourUserSchema);
+
 
 //Export Models
-module.exports = { User, Comment }
+module.exports = TourUser;
 
 
 
