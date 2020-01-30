@@ -172,10 +172,10 @@ router.post('/api/r-booking/:tourguyId', passport.authenticate('jwt'), (req, res
     .then(Tuser => {
       const tourguyb = Tuser
       //id for regularUser
-      RegUser.findById({ _id: req.user._id })
+      RegUser.findById({ _id: req.user.id })
         .then(Ruser => {
           const regUserb = Ruser
-          console.log(req.user._id + "req.user._id")
+          console.log(req.user.id + "req.user._id")
           Booking.create({ tourGuy: tourguyb, regUser: regUserb })
             .then(book => 
               // res.send("Book is made successfully"),
