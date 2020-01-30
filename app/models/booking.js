@@ -1,16 +1,17 @@
 var mongoose = require("mongoose"); 
 var Schema = mongoose.Schema;
-var User = require('../models/user').User
+var tUser = require('../models/tourUser')
+var rUser = require('../models/regUser')
 
 const bookingSchema = new Schema(
     {
         tourguy:{
             type: Schema.Types.ObjectId,
-            ref:'User'
+            ref:'tUser'
         },
         regUser:{
                 type: Schema.Types.ObjectId,
-                ref:'User'
+                ref:'rUser'
         },
     },
     {timestamps:true}

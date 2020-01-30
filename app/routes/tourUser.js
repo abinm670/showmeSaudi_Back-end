@@ -35,12 +35,11 @@ var Comment = require('../models/comment')
 // Middleware required for post
 // router.use(express.urlencoded());
 
-
 //create tourUser 
 router.post('/api/newTuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
  
   TourUser.create(req.body)
-      .then(newTuser => {
+     .then(newTuser => {
         res.json(newTuser);
 
       }).catch((err) => {
@@ -65,10 +64,7 @@ router.get('/api/t-users', (req, res) => {
       console.log("okay")
 
     }).catch(err => console.log(err))
-  // User.find({}, (err, foundUser) => {
-  //     res.send(foundUser);
 
-  // })
 })
 
 //show all tourGuys
@@ -124,6 +120,7 @@ router.put('/api/t-user_edit/:id', (req, res) => {
       }).catch(err => {
         console.log("could not update tour user", err)
 
+  
       });
   })
 
@@ -141,7 +138,7 @@ router.post('/api/t-login', (req, res) => {
         if (req.body.email === user.email && req.body.password === user.password) {
           const payLoad = { id: user.id };
           //create token and send it to user 
-          const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 300 })
+          const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
           res.status(200).json({ success: true, token: token })
         }
         else {
@@ -197,28 +194,14 @@ router.post('/api/comment', (req, res) => {
 })
 
 
-router.post('/api/booking/:tourguyId', passport.authenticate('jwt'), (req, res) => {
-  //id is for tourguy
-  User.findById({ _id: req.params.tourguyId })
-    .then(Tuser => {
-      const tourguyb = Tuser
-      //id for regularUser
-      User.findById({ _id: req.user._id })
-        .then(Ruser => {
-          const regUserb = Ruser
-          console.log(req.user._id + "req.user._id")
-          Booking.create({ tourGuy: tourguyb, regUser: regUserb })
-            .then(book => res.send("Book is made successfully"))
-        })
 
-    })
-})
 
 //get all booking
 router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find({$or:[{ tourGuy: req.user._id },{ regUser: req.user._id }]})
+  Booking.find( {tourGuy: req.user._id})
   .then(books => {
     res.send(books)
+  
     console.log("all book for"+req.user._id)
   }).catch(err => console.log(err)) 
 })
