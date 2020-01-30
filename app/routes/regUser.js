@@ -26,27 +26,34 @@ const strategy = require('../lib/passportStrategy');
 passport.use(strategy);
 
 // Require Mongoose Model for User & Touring
-var RegUser  = require('../models/regUser')
+var RegUser = require('../models/regUser')
+var TourUser = require('../models/tourUser')
+var Booking = require('../models/booking');
 
 
-// Middleware required for post
-// router.use(express.urlencoded());
+
+
+
+
+//Middleware required for post
+router.use(express.urlencoded());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //create RegUser 
 router.post('/api/newRuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
- 
+
   RegUser.create(req.body)
-      .then(newTuser => {
-        res.json(newTuser);
+    .then(newTuser => {
+      res.json(newTuser);
 
-      }).catch((err) => {
-        console.log("tour user cant be created", err);
+    }).catch((err) => {
+      console.log("tour user cant be created", err);
 
-      });
     });
-  
-      
+});
+
+
 
 // show specific user 
 router.get('/api/r-user/:id', (req, res) => {
@@ -106,18 +113,18 @@ router.delete('/api/r-user/delete/:id', (req, res) => {
 
 // edit - complete
 router.put('/api/r-user_edit/:id', (req, res) => {
-  
+
   RegUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
-      .then(userUpdate => {
+    .then(userUpdate => {
 
-        res.json(userUpdate)
-      }).catch(err => {
-        console.log("could not update tour user", err)
-      });
- 
+      res.json(userUpdate)
+    }).catch(err => {
+      console.log("could not update tour user", err)
+    });
 
 
-  })
+
+})
 
 
 
@@ -134,7 +141,7 @@ router.post('/api/r-login', (req, res) => {
           const payLoad = { id: user.id };
 
           //create token and send it to user 
-          const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 300 })
+          const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
           res.status(200).json({ success: true, token: token })
         }
         else {
@@ -156,6 +163,51 @@ router.get('/api/r-protected', passport.authenticate('jwt', { session: false }),
     user: req.user
   });
 });
+
+
+//booking 
+router.post('/api/r-booking/:tourguyId', passport.authenticate('jwt'), (req, res) => {
+  //id is for tourguy
+  TourUser.findById({ _id: req.params.tourguyId })
+    .then(Tuser => {
+      const tourguyb = Tuser
+      //id for regularUser
+      RegUser.findById({ _id: req.user._id })
+        .then(Ruser => {
+          const regUserb = Ruser
+          console.log(req.user._id + "req.user._id")
+          Booking.create({ tourGuy: tourguyb, regUser: regUserb })
+            .then(book => 
+              // res.send("Book is made successfully"),
+              res.json("yes", book)
+              )
+        })
+
+    })
+})
+
+//get all booking
+router.get('/api/r-booking', passport.authenticate('jwt'), (req, res) => {
+  Booking.find({ regUser: req.user._id })
+    .then(books => {
+      res.send(books)
+      console.log("all book for" + req.user._id)
+    }).catch(err => console.log(err))
+})
+
+// cancel booking
+router.delete('/api/r-booking/delete/:id', (req, res) => {
+  Booking.findByIdAndRemove(req.params.id, (err, book) => {
+    if (err) {
+      console.log("booking not cancel", err)
+    }
+    else {
+      res.redirect('/');
+      console.log("perfect cancel booking")
+    }
+  });
+});
+
 
 
 
