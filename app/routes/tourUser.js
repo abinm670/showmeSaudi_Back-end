@@ -36,7 +36,7 @@ var Comment = require('../models/comment')
 // router.use(express.urlencoded());
 
 //create tourUser 
-router.post('/api/newTuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
+router.post('/api/newTuser', middlewares.upload.single('img'), (req, res) => {
  
   TourUser.create(req.body)
      .then(newTuser => {
@@ -136,7 +136,7 @@ router.post('/api/t-login', (req, res) => {
       }
       else {
         if (req.body.email === user.email && req.body.password === user.password) {
-          const payLoad = { id: user.id };
+          const payLoad = { user: user };
           //create token and send it to user 
           const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
           res.status(200).json({ success: true, token: token })

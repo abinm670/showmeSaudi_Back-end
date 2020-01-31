@@ -129,7 +129,7 @@ router.put('/api/r-user_edit/:id', (req, res) => {
 
 
 //Loging ---- Completed     
-router.post('/api/r-login', (req, res) => {
+router.post('/api/r-login',middlewares.upload.single('img'), (req, res) => {
   //make sure they send pass & user
   if (req.body.email && req.body.password) {
     RegUser.findOne({ email: req.body.email }, (err, user) => {
