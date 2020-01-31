@@ -10,7 +10,7 @@ var tourUserSchema = new Schema(
     password: { type: String, required: [true, "can't be blank"] },
     firstName: { type: String, required: [true, "can't be blank"] },
     lastName: { type: String, required: [true, "can't be blank"] },
-    tourType: { type: String, default: "tour user" },
+    tourType: { type: String, default: "tourUser" },
     address: String,
     phone: String,
     img: {type:String, required: [true, "should upload image"]},

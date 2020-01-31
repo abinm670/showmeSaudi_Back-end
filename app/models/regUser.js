@@ -11,6 +11,8 @@ var regUserSchema = new Schema(
     tourType: { type: String, default: "regUser" },
     address: String,
     phone: String,
+    img: {type:String, required: [true, "should upload image"]},
+
     // userTyp:"regUser"
     // img: {type:String, required: [true, "should upload image"]},
           
