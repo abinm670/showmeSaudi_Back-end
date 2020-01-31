@@ -67,15 +67,6 @@ router.get('/api/t-users', (req, res) => {
 
 })
 
-//show all tourGuys
-router.get('/api/tourGuys', (req, res) => {
-  User.find({tourType:"tourUser"})
-    .then(user => {
-      res.send(user)
-      console.log("tourGuys")
-    }).catch(err => console.log(err))
-})
-
 // delete user account
 router.delete('/api/t-user/delete/:id', (req, res) => {
   TourUser.findByIdAndRemove(req.params.id, (err, data) => {

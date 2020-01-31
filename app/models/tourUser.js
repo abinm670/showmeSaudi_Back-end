@@ -15,18 +15,15 @@ var tourUserSchema = new Schema(
     phone: String,
     img: {type:String, required: [true, "should upload image"]},
     comment: [{ type: Schema.Types.ObjectId, ref: "comment" }],
-    tourGuy: {
     AboutMe: { type: String },
     package: [{
     packName: { type: String },
         // {packImg: {type:String, required: [true, "should upload image"]}},
     description: { type: String },
-      }],
-      likes: { type: Number, default: 0 },
-
-      price: { type: String, default: "free" }
-    },
-    
+      }],  
+    likes: { type: Number, default: 0 },
+    rate:{type:Number,default:0},
+    price: { type: String, default: "free" }
     //  {timestamps: true }
   })
 
