@@ -8,6 +8,7 @@ const multer = require('multer');
 // img guidLine info
 const middlewares = require('../models/middlewares');
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
@@ -38,10 +39,11 @@ var Booking = require('../models/booking');
 //Middleware required for post
 router.use(express.urlencoded());
 // app.use(bodyParser.urlencoded({ extended: true }));
+router.use(fileUpload());
 
 
 //create RegUser 
-router.post('/api/newRuser', middlewares.upload.single('img'), (req, res) => {
+router.post('/api/newRuser', (req, res) => {
   console.log(req.body)
   RegUser.create(req.body)
     .then(newTuser => {
@@ -53,6 +55,23 @@ router.post('/api/newRuser', middlewares.upload.single('img'), (req, res) => {
     });
 });
 
+// Upload Endpoint
+router.post('/api/upload', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+
+  file.mv(`${__dirname}/../uploads/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `../uploads/${file.name}` });
+  });
+});
 
 
 // show specific user 
@@ -129,7 +148,7 @@ router.put('/api/r-user_edit/:id', (req, res) => {
 
 
 //Loging ---- Completed     
-router.post('/api/r-login',middlewares.upload.single('img'), (req, res) => {
+router.post('/api/r-login', (req, res) => {
   //make sure they send pass & user
   if (req.body.email && req.body.password) {
     RegUser.findOne({ email: req.body.email }, (err, user) => {
@@ -173,6 +192,12 @@ router.post('/api/r-booking/:tourguyId', (req, res) => {
 
       const tourguyb = Tuser
       //id for regularUser
+      RegUser.find()
+      .then(user => {
+        res.send(user)
+        console.log("okay")
+  
+      }).catch(err => console.log(err))
       const payLoad = { user: user };
 
       RegUser.findById({ _id: req.user._id })
