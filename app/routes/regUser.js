@@ -43,8 +43,7 @@ router.use(fileUpload());
 
 
 //create RegUser 
-router.post('/api/newRuser', (req, res) => {
-  console.log(req.body)
+router.post('/api/newRuser',middlewares.upload.single('img'), (req, res) => {
   RegUser.create(req.body)
     .then(newTuser => {
       res.json(newTuser);
@@ -192,18 +191,9 @@ router.post('/api/r-booking/:tourguyId', (req, res) => {
 
       const tourguyb = Tuser
       //id for regularUser
-      RegUser.find()
-      .then(user => {
-        res.send(user)
-        console.log("okay")
-  
-      }).catch(err => console.log(err))
-      const payLoad = { user: user };
-
       RegUser.findById({ _id: req.user._id })
         .then(Ruser => {
           const regUserb = Ruser
-          console.log(req.user.id + "req.user._id")
           Booking.create({ tourGuy: tourguyb, regUser: regUserb })
             .then(book => 
               res.json("yes", book),
