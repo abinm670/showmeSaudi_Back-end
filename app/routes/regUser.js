@@ -41,7 +41,7 @@ router.use(express.urlencoded());
 
 
 //create RegUser 
-router.post('/api/newRuser', middlewares.upload.single('tourGuyImg'), (req, res) => {
+router.post('/api/newRuser', middlewares.upload.single('img'), (req, res) => {
   console.log(req.body)
   RegUser.create(req.body)
     .then(newTuser => {
@@ -166,20 +166,23 @@ router.get('/api/r-protected', passport.authenticate('jwt', { session: false }),
 
 
 //booking 
-router.post('/api/r-booking/:tourguyId', passport.authenticate('jwt'), (req, res) => {
+router.post('/api/r-booking/:tourguyId', (req, res) => {
   //id is for tourguy
   TourUser.findById({ _id: req.params.tourguyId })
     .then(Tuser => {
+
       const tourguyb = Tuser
       //id for regularUser
-      RegUser.findById({ _id: req.user.id })
+      const payLoad = { user: user };
+
+      RegUser.findById({ _id: req.user._id })
         .then(Ruser => {
           const regUserb = Ruser
           console.log(req.user.id + "req.user._id")
           Booking.create({ tourGuy: tourguyb, regUser: regUserb })
             .then(book => 
-              // res.send("Book is made successfully"),
-              res.json("yes", book)
+              res.json("yes", book),
+              res.send("Book is made successfully")
               )
         })
 

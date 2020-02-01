@@ -37,7 +37,7 @@ app.use(regUserRouter);
 
 //app.use(express.static(__dirname));
 
-app.use('/uploads', express.static('uploads'));
+app.use('./app/uploads', express.static('uploads'));
 //Define PORT for API to run on 
 const port = process.env.Port || 7000;
 
