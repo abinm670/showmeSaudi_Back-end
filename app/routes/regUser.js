@@ -193,8 +193,6 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
       RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
-=
-
         Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
           if(booking){
             res.send("Book can not made")
