@@ -184,14 +184,14 @@ router.get('/api/r-protected', passport.authenticate('jwt', { session: false }),
 
 
 //booking 
-router.post('/api/r-booking/:tourguyId', (req, res) => {
+router.post('/api/r-booking/:tourguyId/:regUserId', (req, res) => {
   //id is for tourguy
   TourUser.findById({ _id: req.params.tourguyId })
     .then(Tuser => {
 
       const tourguyb = Tuser
       //id for regularUser
-      RegUser.findById({ _id: req.user._id })
+      RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
           Booking.create({ tourGuy: tourguyb, regUser: regUserb })

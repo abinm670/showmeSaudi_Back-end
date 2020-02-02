@@ -13,6 +13,9 @@ const bookingSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref:'rUser'
         },
+        date:{
+            type:String
+        }
     },
     {timestamps:true}
 );
