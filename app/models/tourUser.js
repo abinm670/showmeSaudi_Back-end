@@ -10,23 +10,21 @@ var tourUserSchema = new Schema(
     password: { type: String, required: [true, "can't be blank"] },
     firstName: { type: String, required: [true, "can't be blank"] },
     lastName: { type: String, required: [true, "can't be blank"] },
-    tourType: { type: String, default: "tour user" },
+    tourType: { type: String, default: "tourUser" },
     city: String,
+    // address: {type:String, default:'Jeddah', enum:['Riyadh' , 'Jeddah' ,'Al-Ola' , 'Al-khobar', 'Abha', 'Jazan'], required:[true, "cant be balnk"]}, 
     phone: String,
     // img: {type:String, required: [true, "should upload image"]},
     comment: [{ type: Schema.Types.ObjectId, ref: "comment" }],
-    tourGuy: {
     AboutMe: { type: String },
     package: [{
     packName: { type: String },
         // {packImg: {type:String, required: [true, "should upload image"]}},
     description: { type: String },
-      }],
-      likes: { type: Number, default: 0 },
-
-      price: { type: String, default: "free" }
-    },
-    
+      }],  
+    likes: { type: Number, default: 0 },
+    rate:{type:Number,default:0},
+    price: { type: String, default: "free" }
     //  {timestamps: true }
   })
 
