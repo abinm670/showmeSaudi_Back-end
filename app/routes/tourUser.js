@@ -71,6 +71,14 @@ router.get('/api/t-users', (req, res) => {
   // })
 })
 
+//show all user in specific city
+router.get('/api/t-users/:city', (req, res) => {
+  TourUser.find({city:req.params.city}, (err, foundUser) => {
+    console.log(foundUser)
+    res.send(foundUser)
+  })
+})
+
 // delete user account
 router.delete('/api/t-user/delete/:id', (req, res) => {
   TourUser.findByIdAndRemove(req.params.id, (err, data) => {

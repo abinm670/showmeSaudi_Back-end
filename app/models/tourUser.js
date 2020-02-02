@@ -11,9 +11,9 @@ var tourUserSchema = new Schema(
     firstName: { type: String, required: [true, "can't be blank"] },
     lastName: { type: String, required: [true, "can't be blank"] },
     tourType: { type: String, default: "tour user" },
-    address: String,
+    city: String,
     phone: String,
-    img: {type:String, required: [true, "should upload image"]},
+    // img: {type:String, required: [true, "should upload image"]},
     comment: [{ type: Schema.Types.ObjectId, ref: "comment" }],
     tourGuy: {
     AboutMe: { type: String },
