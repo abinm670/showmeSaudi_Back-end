@@ -5,7 +5,7 @@ var rUser = require('../models/regUser')
 
 const bookingSchema = new Schema(
     {
-        tourguy:{
+        tourGuy:{
             type: Schema.Types.ObjectId,
             ref:'tUser'
         },

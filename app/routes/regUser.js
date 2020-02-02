@@ -184,21 +184,38 @@ router.get('/api/r-protected', passport.authenticate('jwt', { session: false }),
 
 
 //booking 
-router.post('/api/r-booking/:tourguyId/:regUserId', (req, res) => {
+router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
   //id is for tourguy
   TourUser.findById({ _id: req.params.tourguyId })
     .then(Tuser => {
-
       const tourguyb = Tuser
       //id for regularUser
       RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
-          Booking.create({ tourGuy: tourguyb, regUser: regUserb })
+
+        Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
+          if(booking){
+            res.send("Book can not made")
+          }else{
+             Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
             .then(book => 
               res.json("yes", book),
               res.send("Book is made successfully")
               )
+          }
+        })
+          // const regUserb = Ruser
+          // if (Booking.findOne({date:req.params.date ,tourGuy: tourguyb,regUser: regUserb}).exists===true){
+          //   res.send("Book can not made")
+          // }
+          // else{
+          //   Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
+          //   .then(book => 
+          //     res.json("yes", book),
+          //     res.send("Book is made successfully")
+          //     )
+          // }
         })
 
     })
