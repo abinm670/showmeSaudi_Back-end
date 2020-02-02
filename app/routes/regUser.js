@@ -222,8 +222,8 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
 })
 
 //get all booking
-router.get('/api/r-booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find({ regUser: req.user._id })
+router.get('/api/r-booking/:regUserId', passport.authenticate('jwt'), (req, res) => {
+  Booking.find({ regUser: req.params.regUserId })
     .then(books => {
       res.send(books)
       console.log("all book for" + req.user._id)
