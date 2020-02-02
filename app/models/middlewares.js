@@ -1,7 +1,6 @@
 const multer = require('multer');
 
 
-
 const storage = multer.diskStorage({
     //cb call back function
     destination: function (req, file, cb) {
