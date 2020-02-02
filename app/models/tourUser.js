@@ -12,7 +12,7 @@ var tourUserSchema = new Schema(
     lastName: { type: String, required: [true, "can't be blank"] },
     tourType: { type: String, default: "tourUser" },
     city: String,
-    // address: {type:String, default:'Jeddah', enum:['Riyadh' , 'Jeddah' ,'Al-Ola' , 'Al-khobar', 'Abha', 'Jazan'], required:[true, "cant be balnk"]}, 
+    // city: {type:String, default:'Jeddah', enum:['Riyadh' , 'Jeddah' ,'Al-Ola' , 'Al-khobar', 'Abha', 'Jazan'], required:[true, "cant be balnk"]}, 
     phone: String,
     // img: {type:String, required: [true, "should upload image"]},
     comment: [{ type: Schema.Types.ObjectId, ref: "comment" }],
