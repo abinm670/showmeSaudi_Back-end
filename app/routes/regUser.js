@@ -155,7 +155,7 @@ router.post('/api/r-login', (req, res) => {
         res.status(400).json({ error: "Invalid pass or email" })
       }
       else {
-        if (req.body.email === user.email && req.body.password === user.password) {
+        if (req.body.email === user.email && req.body.password == user.password) {
           const payLoad = { user: user };
 
           //create token and send it to user 

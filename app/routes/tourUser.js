@@ -71,6 +71,7 @@ router.get('/api/t-users', (req, res) => {
 //show all user in specific city
 router.get('/api/t-user/:city', (req, res) => {
   TourUser.find({city:req.params.city}, (err, foundUser) => {
+
     res.send(foundUser)
   })
 })
