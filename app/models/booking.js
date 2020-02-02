@@ -13,7 +13,7 @@ const bookingSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref:'rUser'
         },
-        date:{
+        resirvation:{
             type:String
         }
     },

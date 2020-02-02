@@ -5,7 +5,7 @@ const storage = multer.diskStorage({
     //cb call back function
     destination: function (req, file, cb) {
       // make uploads folder to store img
-      cb(null, '../uploads/');
+      cb(null, 'C:\Users\h_noo\GA\showmeSaudi_Front-end\public\Images');
       //cb(null, path.join(__dirname, '/uploads/'));
   
     },
