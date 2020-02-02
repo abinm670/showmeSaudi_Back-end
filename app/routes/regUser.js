@@ -155,7 +155,7 @@ router.post('/api/r-login', (req, res) => {
         res.status(400).json({ error: "Invalid pass or email" })
       }
       else {
-        if (req.body.email === user.email && req.body.password === user.password) {
+        if (req.body.email === user.email && req.body.password == user.password) {
           const payLoad = { user: user };
 
           //create token and send it to user 
@@ -188,22 +188,25 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
   //id is for tourguy
   TourUser.findById({ _id: req.params.tourguyId })
     .then(Tuser => {
-
       const tourguyb = Tuser
       //id for regularUser
       RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
-          // if (Booking.find({date:req.params.date}).exists){
-          //   res.send("Book is not made")
-          // }
-          // else{
-            Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
+=
+
+        Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
+          if(booking){
+            res.send("Book can not made")
+          }else{
+             Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
             .then(book => 
               res.json("yes", book),
               res.send("Book is made successfully")
               )
-          //}
+
+          }
+        })
         })
 
     })
