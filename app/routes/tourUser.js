@@ -208,15 +208,13 @@ router.get('/api/t-comment/:TourUser',  (req, res) => {
 // })
 
 
-
 //get all booking
-router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find( {tourGuy: req.user._id})
-  .then(books => {
-    res.send(books)
-  
-    console.log("all book for"+req.user._id)
-  }).catch(err => console.log(err)) 
+router.get('/api/t-booking/:tourGuyId',  (req, res) => {
+  Booking.find({ tourGuy: req.params.tourGuyId })
+    .then(books => {
+      res.send(books)
+      console.log("all book for" + req.params.tourGuyId)
+    }).catch(err => console.log(err))
 })
 
 // cancel booking
@@ -231,6 +229,7 @@ router.delete('/api/booking/delete/:id', (req, res) => {
     }
   }); 
 });
+
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;

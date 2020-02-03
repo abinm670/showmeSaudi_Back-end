@@ -269,16 +269,16 @@ router.post('/api/r-comment/:tourguyId/:regUserId' , (req , res)=>{
 } )
 
 //get all booking
-router.get('/api/r-booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find({ regUser: req.user._id })
+router.get('/api/r-booking/:regUserId',  (req, res) => {
+  Booking.find({ regUser: req.params.regUserId })
     .then(books => {
       res.send(books)
-      console.log("all book for" + req.user._id)
+      console.log("all book for" + req.params.regUserId)
     }).catch(err => console.log(err))
 })
 
 // cancel booking
-router.delete('/api/r-booking/delete/:id', (req, res) => {
+router.delete('/api/booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
     if (err) {
       console.log("booking not cancel", err)
@@ -287,7 +287,7 @@ router.delete('/api/r-booking/delete/:id', (req, res) => {
       res.redirect('/');
       console.log("perfect cancel booking")
     }
-  });
+  }); 
 });
 
 
