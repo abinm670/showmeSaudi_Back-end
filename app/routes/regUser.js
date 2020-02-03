@@ -3,13 +3,6 @@ var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
-//image Upload 
-const multer = require('multer');
-// img guidLine info
-const middlewares = require('../models/middlewares');
-const path = require('path');
-const fileUpload = require('express-fileupload');
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -38,12 +31,11 @@ var Booking = require('../models/booking');
 
 //Middleware required for post
 router.use(express.urlencoded());
-// app.use(bodyParser.urlencoded({ extended: true }));
-router.use(fileUpload());
+
 
 
 //create RegUser 
-router.post('/api/newRuser',middlewares.upload.single('img'), (req, res) => {
+router.post('/api/newRuser', (req, res) => {
   RegUser.create(req.body)
     .then(newTuser => {
       res.json(newTuser);
@@ -54,23 +46,6 @@ router.post('/api/newRuser',middlewares.upload.single('img'), (req, res) => {
     });
 });
 
-// Upload Endpoint
-router.post('/api/upload', (req, res) => {
-  if (req.files === null) {
-    return res.status(400).json({ msg: 'No file uploaded' });
-  }
-
-  const file = req.files.file;
-
-  file.mv(`${__dirname}/../uploads/${file.name}`, err => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
-
-    res.json({ fileName: file.name, filePath: `../uploads/${file.name}` });
-  });
-});
 
 
 // show specific user 
@@ -193,29 +168,32 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
       RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
-        Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
-          if(booking){
-            res.send("Book can not made")
-          }else{
-             Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
-            .then(book => 
-              res.json("yes", book),
-              res.send("Book is made successfully")
-              )
-
+          if(regUserb==null){      
+            res.send("Book can not made because regular user only can make booking")
+          }
+          else{
+            Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
+              if(booking){
+                res.send("Book can not made because this date is already reserved")
+              }else{
+                 Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
+                .then(book => 
+                  res.json("yes", book),
+                  res.send("Book is made successfully")
+                  )
+              }
+            })
           }
         })
-        })
-
     })
 })
 
 //get all booking
-router.get('/api/r-booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find({ regUser: req.user._id })
+router.get('/api/r-booking/:regUserId',  (req, res) => {
+  Booking.find({ regUser: req.params.regUserId })
     .then(books => {
       res.send(books)
-      console.log("all book for" + req.user._id)
+      console.log("all book for" + req.params.regUserId)
     }).catch(err => console.log(err))
 })
 

@@ -13,8 +13,8 @@ const bookingSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref:'rUser'
         },
-        resirvation:{
-            type:String
+        date:{
+             type: String, required: [true, "can't be blank"] 
         }
     },
     {timestamps:true}

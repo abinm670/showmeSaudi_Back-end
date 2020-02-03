@@ -4,11 +4,6 @@ var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
-//image Upload 
-const multer = require('multer');
-// img guidLine info
-const middlewares = require('../models/middlewares');
-const path = require('path');
 
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
@@ -36,8 +31,8 @@ var Comment = require('../models/comment')
 // router.use(express.urlencoded());
 
 //create tourUser 
-router.post('/api/newTuser', middlewares.upload.single('img'), (req, res) => {
- 
+router.post('/api/newTuser', (req, res) => {
+ console.log(req.body)
   TourUser.create(req.body)
      .then(newTuser => {
         res.json(newTuser);
@@ -135,7 +130,7 @@ router.post('/api/t-login', (req, res) => {
         res.status(400).json({ error: "Invalid pass or email" })
       }
       else {
-        if (req.body.email === user.email && req.body.password === user.password) {
+        if (req.body.password === user.password) {
           const payLoad = { user: user };
           //create token and send it to user 
           const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
@@ -197,13 +192,12 @@ router.post('/api/comment', (req, res) => {
 
 
 //get all booking
-router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find( {tourGuy: req.user._id})
-  .then(books => {
-    res.send(books)
-  
-    console.log("all book for"+req.user._id)
-  }).catch(err => console.log(err)) 
+router.get('/api/t-booking/:tourGuyId',  (req, res) => {
+  Booking.find({ tourGuy: req.params.tourGuyId })
+    .then(books => {
+      res.send(books)
+      console.log("all book for" + req.params.tourGuyId)
+    }).catch(err => console.log(err))
 })
 
 // cancel booking
