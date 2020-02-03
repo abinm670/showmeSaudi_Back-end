@@ -5,11 +5,18 @@ var Schema = mongoose.Schema;
 //Comments Schema 
 var commentsSchema = new Schema(
   {
-    comment: { type: String, required: [true, "can't be blank"] },
-    datePublishedOn: { type: Date, default: Date.now },
-    id2: String 
-    // name:String
-
+  tourGuy:{
+    type: Schema.Types.ObjectId,
+    ref:'tUser'
+  },
+  regUser:{
+    type: Schema.Types.ObjectId,
+    ref:'rUser'
+  },
+  comment: { type: String, required: [true, "can't be blank"] },
+  datePublishedOn: { type: Date, default: Date.now },
+  id2: String 
+  // name:String
   }, { timestamps: true }
 
 )
