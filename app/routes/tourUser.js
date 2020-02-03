@@ -4,12 +4,6 @@ var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
-//image Upload 
-const multer = require('multer');
-// img guidLine info
-const middlewares = require('../models/middlewares');
-const path = require('path');
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
