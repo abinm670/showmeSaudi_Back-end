@@ -4,12 +4,6 @@ var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
-//image Upload 
-const multer = require('multer');
-// img guidLine info
-const middlewares = require('../models/middlewares');
-const path = require('path');
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -32,11 +26,8 @@ var Booking = require('../models/booking');
 var TourUser  = require('../models/tourUser')
 var Comment = require('../models/comment')
 
-// Middleware required for post
-// router.use(express.urlencoded());
-
 //create tourUser 
-router.post('/api/newTuser', middlewares.upload.single('img'), (req, res) => {
+router.post('/api/newTuser', (req, res) => {
  
   TourUser.create(req.body)
      .then(newTuser => {
@@ -67,13 +58,6 @@ router.get('/api/t-users', (req, res) => {
     }).catch(err => console.log(err))
 
 })
-
-// //show all user in specific city
-// router.get('/api/t-users/:city', (req, res) => {
-//   TourUser.find({address:req.params.city}, (err, foundUser) => {
-//     res.send(foundUser)
-//   })
-// })
 
 //show all user in specific city
 router.get('/api/t-users/:city', (req, res) => {
@@ -115,8 +99,6 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
 
 // })
 // })
-
-
 
 // edit - complete
 router.put('/api/t-user_edit/:id', (req, res) => {
@@ -208,19 +190,17 @@ router.get('/api/t-comment/:TourUser',  (req, res) => {
 // })
 
 
-
 //get all booking
-router.get('/api/booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find( {tourGuy: req.user._id})
-  .then(books => {
-    res.send(books)
-  
-    console.log("all book for"+req.user._id)
-  }).catch(err => console.log(err)) 
+router.get('/api/t-booking/:tourGuyId',  (req, res) => {
+  Booking.find({ tourGuy: req.params.tourGuyId })
+    .then(books => {
+      res.send(books)
+      console.log("all book for" + req.params.tourGuyId)
+    }).catch(err => console.log(err))
 })
 
 // cancel booking
-router.delete('/api/booking/delete/:id', (req, res) => {
+router.delete('/api/t-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
     if (err) {
       console.log("booking not cancel", err)
@@ -231,6 +211,7 @@ router.delete('/api/booking/delete/:id', (req, res) => {
     }
   }); 
 });
+
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
