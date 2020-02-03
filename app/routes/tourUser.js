@@ -48,6 +48,7 @@ router.post('/api/newTuser', middlewares.upload.single('img'), (req, res) => {
       });
     });
   
+    
 // show specific user 
 router.get('/api/t-user/:id', (req, res) => {
   TourUser.findById(req.params.id, (err, foundUser) => {
@@ -77,7 +78,7 @@ router.get('/api/t-users', (req, res) => {
 //show all user in specific city
 router.get('/api/t-users/:city', (req, res) => {
   TourUser.find({city:req.params.city}, (err, foundUser) => {
-    console.log(foundUser)
+
     res.send(foundUser)
   })
 })
