@@ -25,18 +25,10 @@ var TourUser = require('../models/tourUser')
 var Booking = require('../models/booking');
 var Comment = require('../models/comment')
 
-
-
-
-
-//Middleware required for post
 router.use(express.urlencoded());
-// app.use(bodyParser.urlencoded({ extended: true }));
-router.use(fileUpload());
-
 
 //create RegUser 
-router.post('/api/newRuser',middlewares.upload.single('img'), (req, res) => {
+router.post('/api/newRuser', (req, res) => {
   RegUser.create(req.body)
     .then(newTuser => {
       res.json(newTuser);
