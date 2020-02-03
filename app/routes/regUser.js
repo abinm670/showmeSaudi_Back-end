@@ -29,7 +29,7 @@ passport.use(strategy);
 var RegUser = require('../models/regUser')
 var TourUser = require('../models/tourUser')
 var Booking = require('../models/booking');
-
+var Comment = require('../models/comment')
 
 
 
@@ -188,6 +188,61 @@ router.post('/api/r-booking/:tourguyId', (req, res) => {
 
     })
 })
+
+router.post('/api/r-comment/:tourguyId/:regUserId/:comment', (req, res) => {
+  //id is for tourguy
+  console.log("inside post comment")
+  TourUser.findById({ _id: req.params.tourguyId })
+    .then(Tuser => {
+      console.log("Tuser"+Tuser)
+      const tourguyb = Tuser
+      //id for regularUser
+      RegUser.findById({ _id: req.params.regUserId })
+        .then(Ruser => {
+          console.log("Ruser"+Ruser)
+          const regUserb = Ruser
+          if(regUserb==null){   
+            console.log("inside post comment is null")   
+            res.send("comment can not made because regular user only can make comment")
+          }
+          else{
+            console.log("Tring to find comment"+req.params.comment)
+            // Comment.findOne({comment:req.params.comment ,tourGuy: tourguyb}, (err, commentt) =>{
+             
+            // if(commentt){
+              //   res.send("comment can not made because this date is already reserved")
+              // }else{
+                 Comment.create({ tourGuy: tourguyb, regUser: regUserb, comment: req.params.comment })
+                 .then(comment => {
+                  TourUser.findByIdAndUpdate(req.body.id, { $push: { comment: comment } })
+                  console.log("TourUser.Comment"+TourUser.Comment)
+                  console.log("Tring to find comment.. creat it")
+                 // .then(comm => 
+                 //   res.json("yes", comm),
+                   res.send("Comment is made successfully")
+                   // )
+                   console.log("Comment is made successfully")
+
+                 })
+                
+            // }
+          // })
+          }
+        })
+    })
+})
+
+router.post('/api/r-comment/:tourguyId/:regUserId' , (req , res)=>{
+
+  Comment.create({ tourGuy: req.params.tourguyId, regUser: req.params.regUserId, comment: req.body.comment })
+  .then(comment =>{
+    TourUser.findByIdAndUpdate(req.body.id, { $push: { comment: comment } })
+    .then(user=>  {
+      res.json({msg :  "comment created" , user })
+    } ).catch(err => res.send(err))
+  }).catch(err => res.send(err))
+
+} )
 
 //get all booking
 router.get('/api/r-booking', passport.authenticate('jwt'), (req, res) => {
