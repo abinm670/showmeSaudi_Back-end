@@ -68,6 +68,13 @@ router.get('/api/t-users', (req, res) => {
 
 })
 
+// //show all user in specific city
+// router.get('/api/t-users/:city', (req, res) => {
+//   TourUser.find({address:req.params.city}, (err, foundUser) => {
+//     res.send(foundUser)
+//   })
+// })
+
 //show all user in specific city
 router.get('/api/t-users/:city', (req, res) => {
   TourUser.find({city:req.params.city}, (err, foundUser) => {
@@ -172,38 +179,44 @@ router.get('/api/protected', passport.authenticate('jwt', { session: false }), (
   });
 });
 
-// write a comment on tour guy profile
-router.post('/api/comment', (req, res) => {
-  Comment.create({ comment: req.body.comment, id2: req.body.id2 })
-    .then(comment => {
+//   //get all comment
+// router.get('/api/comment', (req, res) => {
+//   Comment.find()
+//     .then(comments => {
+//       res.send(comments)
+//       console.log("all comment" )
+//     }).catch(err => console.log(err))
+// })
 
-    //   Touring.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
-    //     .then(user => res.json({ msg: "the comment has been added " }))
-    //     .catch(err => res.sent(err))
-    //   res.send(comment)
-    // })
-    // .catch(err => {
-    //   console.log(err)
-
-      console.log(comment)
-      console.log(res)
-      //  { $pash: { comments: comment._id }
-      TourUser.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
-        .then(user => {
-          console.log(user)
-          res.json({ msg: "the comment has been added " })
-          console.log(comments)
-
-        })
-        .catch(err => res.json(err))
-      // res.send(comment)
-    })
-    .catch(err => {
-      console.log(err)
-      // res.send(err)
-    })
+router.get('/api/t-comment/:TourUser',  (req, res) => {
+  Comment.find({ TourUser: req.params.tourguyId })
+    .then(com => { 
+      res.send(com)
+      console.log("all com for" + req.params.tourguyId)
+    }).catch(err => console.log(err))
 })
 
+
+// // write a comment on tour guy profile
+// router.post('/api/comment', (req, res) => {
+//   console.log("add comment")
+//   Comment.create({ comment: req.body.comment, id2: req.body.id2 })
+//     .then(comment => {
+//       console.log(comment)
+//       console.log(res) 
+//       //  { $pash: { comments: comment._id }
+//       TourUser.findByIdAndUpdate(req.body.id, { $push: { comments: comment._id } })
+//         .then(user => {
+//           console.log(user)
+//           res.json({ msg: "the comment has been added " })
+//           console.log(comments)
+//         })
+//         .catch(err => res.json(err))
+//     })
+//     .catch(err => {
+//       console.log(err)
+//     })
+// })
 
 
 
