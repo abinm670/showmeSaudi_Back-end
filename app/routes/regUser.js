@@ -193,31 +193,23 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
       RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
-
-        Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
-          if(booking){
-            res.send("Book can not made")
-          }else{
-             Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
-            .then(book => 
-              res.json("yes", book),
-              res.send("Book is made successfully")
-              )
+          if(regUserb==null){      
+            res.send("Book can not made because regular user only can make booking")
+          }
+          else{
+            Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
+              if(booking){
+                res.send("Book can not made because this date is already reserved")
+              }else{
+                 Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
+                .then(book => 
+                  res.json("yes", book),
+                  res.send("Book is made successfully")
+                  )
+              }
+            })
           }
         })
-          // const regUserb = Ruser
-          // if (Booking.findOne({date:req.params.date ,tourGuy: tourguyb,regUser: regUserb}).exists===true){
-          //   res.send("Book can not made")
-          // }
-          // else{
-          //   Booking.create({ tourGuy: tourguyb, regUser: regUserb, date:req.params.date })
-          //   .then(book => 
-          //     res.json("yes", book),
-          //     res.send("Book is made successfully")
-          //     )
-          // }
-        })
-
     })
 })
 
