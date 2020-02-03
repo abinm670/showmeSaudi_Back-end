@@ -12,9 +12,9 @@ var regUserSchema = new Schema(
     city: {type: String, required:[true, "can't be blank"]},
     phone: String,
     image: {type:String},
+    // img: {type:String, required: [true, "should upload image"]},
 
     // userTyp:"regUser"
-    // img: {type:String, required: [true, "should upload image"]},
           
     }, {timestamps:true}
 )
