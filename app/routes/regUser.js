@@ -39,25 +39,6 @@ router.post('/api/newRuser', (req, res) => {
     });
 });
 
-// Upload Endpoint
-router.post('/api/upload', (req, res) => {
-  if (req.files === null) {
-    return res.status(400).json({ msg: 'No file uploaded' });
-  }
-
-  const file = req.files.file;
-
-  file.mv(`${__dirname}/../uploads/${file.name}`, err => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
-
-    res.json({ fileName: file.name, filePath: `../uploads/${file.name}` });
-  });
-});
-
-
 // show specific user 
 router.get('/api/r-user/:id', (req, res) => {
   RegUser.findById(req.params.id, (err, foundUser) => {
@@ -74,10 +55,6 @@ router.get('/api/r-users', (req, res) => {
       console.log("okay")
 
     }).catch(err => console.log(err))
-  // User.find({}, (err, foundUser) => {
-  //     res.send(foundUser);
-
-  // })
 })
 
 // delete user account
@@ -124,9 +101,6 @@ router.put('/api/r-user_edit/:id', (req, res) => {
     }).catch(err => {
       console.log("could not update tour user", err)
     });
-
-
-
 })
 
 
@@ -153,7 +127,6 @@ router.post('/api/r-login', (req, res) => {
       }
     }
     )
-
   }
   else {
     res.status(400).json({ error: 'username & pass are required' })
@@ -263,7 +236,7 @@ router.get('/api/r-booking/:regUserId',  (req, res) => {
 })
 
 // cancel booking
-router.delete('/api/booking/delete/:id', (req, res) => {
+router.delete('/api/r-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
     if (err) {
       console.log("booking not cancel", err)

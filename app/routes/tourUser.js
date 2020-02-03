@@ -59,13 +59,6 @@ router.get('/api/t-users', (req, res) => {
 
 })
 
-// //show all user in specific city
-// router.get('/api/t-users/:city', (req, res) => {
-//   TourUser.find({address:req.params.city}, (err, foundUser) => {
-//     res.send(foundUser)
-//   })
-// })
-
 //show all user in specific city
 router.get('/api/t-users/:city', (req, res) => {
   TourUser.find({city:req.params.city}, (err, foundUser) => {
@@ -106,8 +99,6 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
 
 // })
 // })
-
-
 
 // edit - complete
 router.put('/api/t-user_edit/:id', (req, res) => {
@@ -209,7 +200,7 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
 })
 
 // cancel booking
-router.delete('/api/booking/delete/:id', (req, res) => {
+router.delete('/api/t-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
     if (err) {
       console.log("booking not cancel", err)
