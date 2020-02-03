@@ -124,7 +124,18 @@ router.put('/api/t-user_edit/:id', (req, res) => {
       });
   })
 
+// // edit - rate
+// router.put('/api/t-user_editrate/:id/:rate', (req, res) => {
+  
+//   TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
+//       .then(userUpdate => {
+//         res.json(userUpdate)
+//       }).catch(err => {
+//         console.log("could not update tour user", err)
 
+  
+//       });
+//   })
 
 //Loging ---- Completed     
 router.post('/api/t-login', (req, res) => {
