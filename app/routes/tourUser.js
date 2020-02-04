@@ -19,8 +19,10 @@ var Booking = require('../models/booking');
 var TourUser  = require('../models/tourUser').TourUser
 var Comment = require('../models/comment')
 var Package = require('../models/tourUser').Package
+
 //create tourUser 
 router.post('/api/newTuser', (req, res) => {
+ 
   TourUser.create(req.body)
      .then(newTuser => {
         res.json(newTuser);
@@ -28,6 +30,8 @@ router.post('/api/newTuser', (req, res) => {
         console.log("tour user cant be created", err);
       });
     });
+  
+    
 // show specific user 
 router.get('/api/t-user/:id', (req, res) => {
   TourUser.findById(req.params.id, (err, foundUser) => {
@@ -42,9 +46,11 @@ router.get('/api/t-users', (req, res) => {
       console.log("okay")
     }).catch(err => console.log(err))
 })
+
 //show all user in specific city
 router.get('/api/t-users/:city', (req, res) => {
   TourUser.find({city:req.params.city}, (err, foundUser) => {
+
     res.send(foundUser)
   })
 })
@@ -167,6 +173,8 @@ router.get('/api/t-comment/:tourguyId',  (req, res) => {
 //       console.log(err)
 //     })
 // })
+
+
 //get all booking
 router.get('/api/t-booking/:tourGuyId',  (req, res) => {
   Booking.find({ tourGuy: req.params.tourGuyId })
@@ -193,6 +201,9 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
 //   res.json(books);
 //   })
 // })
+
+
+
 // cancel booking
 router.delete('/api/t-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {

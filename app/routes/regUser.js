@@ -18,7 +18,9 @@ var RegUser = require('../models/regUser')
 var TourUser = require('../models/tourUser')
 var Booking = require('../models/booking');
 var Comment = require('../models/comment')
+
 router.use(express.urlencoded());
+
 //create RegUser 
 router.post('/api/newRuser', (req, res) => {
   RegUser.create(req.body)

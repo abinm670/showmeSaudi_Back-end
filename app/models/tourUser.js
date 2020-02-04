@@ -8,7 +8,7 @@ const packageSchema =new Schema({
       type:String,
       default:''
   },
-  image :{
+  packImage :{
     type:String,
     default:''
   },
