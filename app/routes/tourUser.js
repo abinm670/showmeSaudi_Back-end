@@ -181,6 +181,7 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
     .then(books => {
       for(let i in res.data){
         console.log("for")
+
         RegUser.find(data[i].regUser, (err, foundUser) => {
           res.send(foundUser)
         })    
@@ -190,6 +191,7 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
     })
     .catch(err => console.log(err))
 })
+
 // router.get('/api/t-booking/:tourGuyId',  (req, res) => {
 //   Booking.find({ tourGuy: req.params.tourGuyId })
 //   .populate('regUser')
@@ -202,8 +204,6 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
 //   })
 // })
 
-
-
 // cancel booking
 router.delete('/api/t-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
@@ -211,11 +211,11 @@ router.delete('/api/t-booking/delete/:id', (req, res) => {
       console.log("booking not cancel", err)
     }
     else {
-      res.redirect('/');
       console.log("perfect cancel booking")
     }
   }); 
 });
+
 //add package
 router.post('/api/t-users/:TuserId/packages',(req,res)=>{
   const newPackage = new Package({name:req.body.name,image:req.body.image,description:req.body.description});

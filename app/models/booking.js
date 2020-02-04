@@ -14,7 +14,7 @@ const bookingSchema = new Schema(
                 ref:'rUser'
         },
         date:{
-            type:String
+            type:String,required: [true, "can't be blank"]
         }
     },
     {timestamps:true}

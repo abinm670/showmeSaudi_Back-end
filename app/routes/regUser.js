@@ -191,7 +191,8 @@ router.post('/api/r-comment/:tourguyId/:regUserId' , (req , res)=>{
       res.json({msg :  "comment created" , user })
     } ).catch(err => res.send(err))
   }).catch(err => res.send(err))
-} )
+})
+
 //get all booking
 router.get('/api/r-booking/:regUserId',  (req, res) => {
   Booking.find({ regUser: req.params.regUserId })
@@ -200,6 +201,7 @@ router.get('/api/r-booking/:regUserId',  (req, res) => {
       console.log("all book for" + req.params.regUserId)
     }).catch(err => console.log(err))
 })
+
 //get all booking
 // router.get('/api/t-booking/:regUserId',  (req, res) => {
 //   Booking.find({ regUser: req.params.regUserId })
@@ -212,17 +214,20 @@ router.get('/api/r-booking/:regUserId',  (req, res) => {
 //   res.json(books);
 //   })
 // })
+
 // cancel booking
 router.delete('/api/r-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
     if (err) {
+      res.json(err)
       console.log("booking not cancel", err)
     }
     else {
-      res.redirect('/');
+      res.json("perfect cancel booking")
       console.log("perfect cancel booking")
     }
   }); 
 });
+
 // Export the Router so we can use it in the server.js file
 module.exports = router;
