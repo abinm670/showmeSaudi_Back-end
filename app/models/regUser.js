@@ -9,12 +9,12 @@ var regUserSchema = new Schema(
     firstName: { type: String, required: [true, "can't be blank"] },
     lastName: { type: String, required: [true, "can't be blank"] },
     tourType: { type: String, default: "regUser" },
-    city: {type: String, required:[true, "can't be blank"]},
+    city: {type: String},
     phone: String,
+    image: {type:String},
     // img: {type:String, required: [true, "should upload image"]},
 
     // userTyp:"regUser"
-    // img: {type:String, required: [true, "should upload image"]},
           
     }, {timestamps:true}
 )

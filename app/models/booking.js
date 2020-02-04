@@ -5,7 +5,7 @@ var rUser = require('../models/regUser')
 
 const bookingSchema = new Schema(
     {
-        tourguy:{
+        tourGuy:{
             type: Schema.Types.ObjectId,
             ref:'tUser'
         },
@@ -13,6 +13,9 @@ const bookingSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref:'rUser'
         },
+        date:{
+            type:String
+        }
     },
     {timestamps:true}
 );
