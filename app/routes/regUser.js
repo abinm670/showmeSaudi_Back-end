@@ -3,13 +3,6 @@ var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
 
-//image Upload 
-const multer = require('multer');
-// img guidLine info
-const middlewares = require('../models/middlewares');
-const path = require('path');
-const fileUpload = require('express-fileupload');
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -32,18 +25,10 @@ var TourUser = require('../models/tourUser')
 var Booking = require('../models/booking');
 var Comment = require('../models/comment')
 
-
-
-
-
-//Middleware required for post
 router.use(express.urlencoded());
-// app.use(bodyParser.urlencoded({ extended: true }));
-router.use(fileUpload());
-
 
 //create RegUser 
-router.post('/api/newRuser',middlewares.upload.single('img'), (req, res) => {
+router.post('/api/newRuser', (req, res) => {
   RegUser.create(req.body)
     .then(newTuser => {
       res.json(newTuser);
@@ -53,25 +38,6 @@ router.post('/api/newRuser',middlewares.upload.single('img'), (req, res) => {
 
     });
 });
-
-// Upload Endpoint
-router.post('/api/upload', (req, res) => {
-  if (req.files === null) {
-    return res.status(400).json({ msg: 'No file uploaded' });
-  }
-
-  const file = req.files.file;
-
-  file.mv(`${__dirname}/../uploads/${file.name}`, err => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
-
-    res.json({ fileName: file.name, filePath: `../uploads/${file.name}` });
-  });
-});
-
 
 // show specific user 
 router.get('/api/r-user/:id', (req, res) => {
@@ -89,10 +55,6 @@ router.get('/api/r-users', (req, res) => {
       console.log("okay")
 
     }).catch(err => console.log(err))
-  // User.find({}, (err, foundUser) => {
-  //     res.send(foundUser);
-
-  // })
 })
 
 // delete user account
@@ -139,9 +101,6 @@ router.put('/api/r-user_edit/:id', (req, res) => {
     }).catch(err => {
       console.log("could not update tour user", err)
     });
-
-
-
 })
 
 
@@ -168,7 +127,6 @@ router.post('/api/r-login', (req, res) => {
       }
     }
     )
-
   }
   else {
     res.status(400).json({ error: 'username & pass are required' })
@@ -269,11 +227,11 @@ router.post('/api/r-comment/:tourguyId/:regUserId' , (req , res)=>{
 } )
 
 //get all booking
-router.get('/api/r-booking', passport.authenticate('jwt'), (req, res) => {
-  Booking.find({ regUser: req.user._id })
+router.get('/api/r-booking/:regUserId',  (req, res) => {
+  Booking.find({ regUser: req.params.regUserId })
     .then(books => {
       res.send(books)
-      console.log("all book for" + req.user._id)
+      console.log("all book for" + req.params.regUserId)
     }).catch(err => console.log(err))
 })
 
@@ -287,7 +245,7 @@ router.delete('/api/r-booking/delete/:id', (req, res) => {
       res.redirect('/');
       console.log("perfect cancel booking")
     }
-  });
+  }); 
 });
 
 

@@ -12,7 +12,7 @@ var tourUserSchema = new Schema(
 
     city: {type:String, default:'Jeddah', enum:['Riyadh' , 'Jeddah' ,'Al-Ola' , 'Al-khobar', 'Abha', 'Jazan', 'Az Zulfi', 'Makkah' , 'Al-Madinah'], required:[true, "cant be balnk"]}, 
     phone: String,
-    // img: {type:String, required: [true, "should upload image"]},
+    image: {type:String},
     comment: [{ type: Schema.Types.ObjectId, ref: "comment" }],
     AboutMe: { type: String },
     package: [{
