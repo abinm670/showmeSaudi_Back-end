@@ -15,9 +15,10 @@ const strategy = require('../lib/passportStrategy');
 passport.use(strategy);
 // Require Mongoose Model for User & Touring
 var RegUser = require('../models/regUser')
-var TourUser = require('../models/tourUser')
+var TourUser = require('../models/tourUser').TourUser
 var Booking = require('../models/booking');
 var Comment = require('../models/comment')
+var Package = require('../models/tourUser').Package
 
 router.use(express.urlencoded());
 
