@@ -3,25 +3,18 @@ const express = require('express');
 var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-
-
 //require pass
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
 const jwtOption = require('../lib/passportOptions');
 const strategy = require('../lib/passportStrategy');
-
 //strategy middleware
 passport.use(strategy);
-
 // Require Mongoose Model for User & Touring
-
 var Booking = require('../models/booking');
 var TourUser  = require('../models/tourUser').TourUser
 var Comment = require('../models/comment')
@@ -33,10 +26,8 @@ router.post('/api/newTuser', (req, res) => {
   TourUser.create(req.body)
      .then(newTuser => {
         res.json(newTuser);
-
       }).catch((err) => {
         console.log("tour user cant be created", err);
-
       });
     });
   
@@ -47,17 +38,13 @@ router.get('/api/t-user/:id', (req, res) => {
     res.send(foundUser)
   })
 })
-
 //show all user
 router.get('/api/t-users', (req, res) => {
-
   TourUser.find()
     .then(user => {
       res.send(user)
       console.log("okay")
-
     }).catch(err => console.log(err))
-
 })
 
 //show all user in specific city
@@ -67,7 +54,6 @@ router.get('/api/t-users/:city', (req, res) => {
     res.send(foundUser)
   })
 })
-
 // delete user account
 router.delete('/api/t-user/delete/:id', (req, res) => {
   TourUser.findByIdAndRemove(req.params.id, (err, data) => {
@@ -80,7 +66,6 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
     }
   })
 })
-
 //Update tour guy profile 
 // router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
 // set a new value of the user and profile 
@@ -97,25 +82,17 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
 //         res.json(foundProfile);
 //     })
 //     console.log("is good")
-
 // })
 // })
-
 // edit - complete
 router.put('/api/t-user_edit/:id', (req, res) => {
-  
   TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
       .then(userUpdate => {
         res.json(userUpdate)
       }).catch(err => {
         console.log("could not update tour user", err)
-
-  
       });
   })
-
-
-
 //Loging ---- Completed     
 router.post('/api/t-login', (req, res) => {
   //make sure they send pass & user
@@ -137,20 +114,17 @@ router.post('/api/t-login', (req, res) => {
       }
     }
     )
-
   }
   else {
     res.status(400).json({ error: 'username & pass are required' })
   }
 })
-
 router.get('/api/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({
     message: 'you are authorized',
     user: req.user
   });
 });
-
 //   //get all comment
 // router.get('/api/comment', (req, res) => {
 //   Comment.find()
@@ -160,13 +134,23 @@ router.get('/api/protected', passport.authenticate('jwt', { session: false }), (
 //     }).catch(err => console.log(err))
 // })
 
-router.get('/api/t-comment/:TourUser',  (req, res) => {
-  Comment.find({ TourUser: req.params.tourguyId })
+router.get('/api/t-comment/:tourguyId',  (req, res) => {
+  Comment.find({ tourGuy: req.params.tourguyId })
     .then(com => { 
+      console.log(com)
       res.send(com)
       console.log("all com for" + req.params.tourguyId)
     }).catch(err => console.log(err))
 })
+
+// router.get('/api/t-comment/:TourUser',  (req, res) => {
+//   Comment.find({ TourUser: req.params.tourguyId }).populate('comment')
+//     .then(com => { 
+//       res.send(com)
+//       console.log("all com for" + req.params.tourguyId)
+//     }).catch(err => console.log(err))
+// })
+
 
 
 // // write a comment on tour guy profile
@@ -197,7 +181,6 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
     .then(books => {
       for(let i in res.data){
         console.log("for")
-
         RegUser.find(data[i].regUser, (err, foundUser) => {
           res.send(foundUser)
         })    
@@ -207,7 +190,6 @@ router.get('/api/t-booking/:tourGuyId',  (req, res) => {
     })
     .catch(err => console.log(err))
 })
-
 // router.get('/api/t-booking/:tourGuyId',  (req, res) => {
 //   Booking.find({ tourGuy: req.params.tourGuyId })
 //   .populate('regUser')
@@ -234,7 +216,6 @@ router.delete('/api/t-booking/delete/:id', (req, res) => {
     }
   }); 
 });
-
 //add package
 router.post('/api/t-users/:TuserId/packages',(req,res)=>{
   const newPackage = new Package({name:req.body.name,image:req.body.image,description:req.body.description});
@@ -245,20 +226,17 @@ router.post('/api/t-users/:TuserId/packages',(req,res)=>{
       })
   })
 })
-
 //get package
 router.get('/api/t-users/:TuserId/packages',(req,res)=>{
   TourUser.findById(req.params.TuserId,(err,foundUser)=>{
           res.json(foundUser.packages);
   })
 })
-
 //update package
 router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
   // set the value of the user and package ids
   var userId = req.params.TuserId;
   var packageId = req.params.id;
-
   // find user in db by id
   TourUser.findById(userId, (err, foundUser) => {
     // find package embedded in user
@@ -273,6 +251,5 @@ router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
     });
   });
 });
-
 // Export the Router so we can use it in the server.js file
 module.exports = router;

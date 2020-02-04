@@ -2,23 +2,17 @@ const express = require('express');
 var mongoose = require("mongoose");
 // Instantiate a Router (mini app that only handles routes)
 const router = express.Router();
-
 // fixe the DeprecationWarning:
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-
-
 //require pass
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
 const jwtOption = require('../lib/passportOptions');
 const strategy = require('../lib/passportStrategy');
-
 //strategy middleware
 passport.use(strategy);
-
 // Require Mongoose Model for User & Touring
 var RegUser = require('../models/regUser')
 var TourUser = require('../models/tourUser')
@@ -32,31 +26,24 @@ router.post('/api/newRuser', (req, res) => {
   RegUser.create(req.body)
     .then(newTuser => {
       res.json(newTuser);
-
     }).catch((err) => {
       console.log("tour user cant be created", err);
-
     });
 });
-
 // show specific user 
 router.get('/api/r-user/:id', (req, res) => {
   RegUser.findById(req.params.id, (err, foundUser) => {
     res.send(foundUser)
   })
 })
-
 //show all user
 router.get('/api/r-users', (req, res) => {
-
   RegUser.find()
     .then(user => {
       res.send(user)
       console.log("okay")
-
     }).catch(err => console.log(err))
 })
-
 // delete user account
 router.delete('/api/r-user/delete/:id', (req, res) => {
   RegUser.findByIdAndRemove(req.params.id, (err, data) => {
@@ -66,11 +53,9 @@ router.delete('/api/r-user/delete/:id', (req, res) => {
     else {
       res.redirect('/api/r-users');
       console.log("deleted perfect")
-
     }
   })
 })
-
 //Update tour guy profile 
 // router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
 // set a new value of the user and profile 
@@ -89,22 +74,15 @@ router.delete('/api/r-user/delete/:id', (req, res) => {
 //     console.log("is good")
 // })
 // })
-
-
 // edit - complete
 router.put('/api/r-user_edit/:id', (req, res) => {
-
   RegUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
     .then(userUpdate => {
-
       res.json(userUpdate)
     }).catch(err => {
       console.log("could not update tour user", err)
     });
 })
-
-
-
 //Loging ---- Completed     
 router.post('/api/r-login', (req, res) => {
   //make sure they send pass & user
@@ -116,7 +94,6 @@ router.post('/api/r-login', (req, res) => {
       else {
         if (req.body.email === user.email && req.body.password == user.password) {
           const payLoad = { user: user };
-
           //create token and send it to user 
           const token = jwt.sign(payLoad, jwtOption.secretOrKey, { expiresIn: 5000 })
           res.status(200).json({ success: true, token: token })
@@ -132,15 +109,12 @@ router.post('/api/r-login', (req, res) => {
     res.status(400).json({ error: 'username & pass are required' })
   }
 })
-
 router.get('/api/r-protected', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({
     message: 'you are authorized',
     user: req.user
   });
 });
-
-
 //booking 
 router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
   //id is for tourguy
@@ -170,7 +144,6 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
         })
     })
 })
-
 router.post('/api/r-comment/:tourguyId/:regUserId/:comment', (req, res) => {
   //id is for tourguy
   console.log("inside post comment")
@@ -190,7 +163,6 @@ router.post('/api/r-comment/:tourguyId/:regUserId/:comment', (req, res) => {
           else{
             console.log("Tring to find comment"+req.params.comment)
             // Comment.findOne({comment:req.params.comment ,tourGuy: tourguyb}, (err, commentt) =>{
-             
             // if(commentt){
               //   res.send("comment can not made because this date is already reserved")
               // }else{
@@ -204,18 +176,14 @@ router.post('/api/r-comment/:tourguyId/:regUserId/:comment', (req, res) => {
                    res.send("Comment is made successfully")
                    // )
                    console.log("Comment is made successfully")
-
                  })
-                
             // }
           // })
           }
         })
     })
 })
-
 router.post('/api/r-comment/:tourguyId/:regUserId' , (req , res)=>{
-
   Comment.create({ tourGuy: req.params.tourguyId, regUser: req.params.regUserId, comment: req.body.comment })
   .then(comment =>{
     TourUser.findByIdAndUpdate(req.body.id, { $push: { comment: comment } })
@@ -223,9 +191,7 @@ router.post('/api/r-comment/:tourguyId/:regUserId' , (req , res)=>{
       res.json({msg :  "comment created" , user })
     } ).catch(err => res.send(err))
   }).catch(err => res.send(err))
-
 } )
-
 //get all booking
 router.get('/api/r-booking/:regUserId',  (req, res) => {
   Booking.find({ regUser: req.params.regUserId })
@@ -234,7 +200,6 @@ router.get('/api/r-booking/:regUserId',  (req, res) => {
       console.log("all book for" + req.params.regUserId)
     }).catch(err => console.log(err))
 })
-
 //get all booking
 // router.get('/api/t-booking/:regUserId',  (req, res) => {
 //   Booking.find({ regUser: req.params.regUserId })
@@ -247,7 +212,6 @@ router.get('/api/r-booking/:regUserId',  (req, res) => {
 //   res.json(books);
 //   })
 // })
-
 // cancel booking
 router.delete('/api/r-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
@@ -260,10 +224,5 @@ router.delete('/api/r-booking/delete/:id', (req, res) => {
     }
   }); 
 });
-
-
-
-
-
 // Export the Router so we can use it in the server.js file
 module.exports = router;
