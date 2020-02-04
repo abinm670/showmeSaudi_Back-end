@@ -114,18 +114,7 @@ router.put('/api/t-user_edit/:id', (req, res) => {
       });
   })
 
-// // edit - rate
-// router.put('/api/t-user_editrate/:id/:rate', (req, res) => {
-  
-//   TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
-//       .then(userUpdate => {
-//         res.json(userUpdate)
-//       }).catch(err => {
-//         console.log("could not update tour user", err)
 
-  
-//       });
-//   })
 
 //Loging ---- Completed     
 router.post('/api/t-login', (req, res) => {
@@ -284,6 +273,13 @@ router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
     });
   });
 });
+
+///////////////////// show tour user rating
+router.get('/api/t-userRate/:id', (req, res) => {
+  TourUser.findById(req.params.id, (err, foundUser) => {
+  res.json({rate:foundUser.rate,raters:foundUser.raters});
+  })
+})
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;

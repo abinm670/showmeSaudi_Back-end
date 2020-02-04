@@ -21,7 +21,7 @@ passport.use(strategy);
 
 // Require Mongoose Model for User & Touring
 var RegUser = require('../models/regUser')
-var TourUser = require('../models/tourUser')
+var TourUser  = require('../models/tourUser').TourUser
 var Booking = require('../models/booking');
 var Comment = require('../models/comment')
 
@@ -103,6 +103,18 @@ router.put('/api/r-user_edit/:id', (req, res) => {
     });
 })
 
+///////////////////////////// edit - rate
+router.put('/api/t-userRate/:id', (req, res) => {
+  
+  TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
+      .then(userUpdate => {
+        res.json(userUpdate)
+      }).catch(err => {
+        console.log("could not update tour user", err)
+
+  
+      });
+  })
 
 
 //Loging ---- Completed     
