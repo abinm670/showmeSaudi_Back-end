@@ -235,6 +235,19 @@ router.get('/api/r-booking/:regUserId',  (req, res) => {
     }).catch(err => console.log(err))
 })
 
+//get all booking
+// router.get('/api/t-booking/:regUserId',  (req, res) => {
+//   Booking.find({ regUser: req.params.regUserId })
+//   .populate('tourGuy')
+//   .exec((err,books)=>{
+//     if (err){
+//       res.status(500).send(err);
+//       return;
+//   }
+//   res.json(books);
+//   })
+// })
+
 // cancel booking
 router.delete('/api/r-booking/delete/:id', (req, res) => {
   Booking.findByIdAndRemove(req.params.id, (err, book) => {
