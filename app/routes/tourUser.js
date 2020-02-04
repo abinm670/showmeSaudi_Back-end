@@ -23,8 +23,9 @@ passport.use(strategy);
 // Require Mongoose Model for User & Touring
 
 var Booking = require('../models/booking');
-var TourUser  = require('../models/tourUser')
+var TourUser  = require('../models/tourUser').TourUser
 var Comment = require('../models/comment')
+var Package = require('../models/tourUser').Package
 
 //create tourUser 
 router.post('/api/newTuser', (req, res) => {
@@ -205,10 +206,32 @@ router.get('/api/t-comment/:TourUser',  (req, res) => {
 router.get('/api/t-booking/:tourGuyId',  (req, res) => {
   Booking.find({ tourGuy: req.params.tourGuyId })
     .then(books => {
+      for(let i in res.data){
+        console.log("for")
+
+        RegUser.find(data[i].regUser, (err, foundUser) => {
+          res.send(foundUser)
+        })    
+        console.log("all book for" + req.params.tourGuyId)
+      }
       res.send(books)
-      console.log("all book for" + req.params.tourGuyId)
-    }).catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
 })
+
+// router.get('/api/t-booking/:tourGuyId',  (req, res) => {
+//   Booking.find({ tourGuy: req.params.tourGuyId })
+//   .populate('regUser')
+//   .exec((err,books)=>{
+//     if (err){
+//       res.status(500).send(err);
+//       return;
+//   }
+//   res.json(books);
+//   })
+// })
+
+
 
 // cancel booking
 router.delete('/api/t-booking/delete/:id', (req, res) => {
@@ -223,6 +246,44 @@ router.delete('/api/t-booking/delete/:id', (req, res) => {
   }); 
 });
 
+//add package
+router.post('/api/t-users/:TuserId/packages',(req,res)=>{
+  const newPackage = new Package({name:req.body.name,image:req.body.image,description:req.body.description});
+  TourUser.findById(req.params.TuserId,(err,foundUser)=>{
+      foundUser.packages.push(newPackage);
+      foundUser.save((err,savedUser)=>{
+          res.json(savedUser);
+      })
+  })
+})
+
+//get package
+router.get('/api/t-users/:TuserId/packages',(req,res)=>{
+  TourUser.findById(req.params.TuserId,(err,foundUser)=>{
+          res.json(foundUser.packages);
+  })
+})
+
+//update package
+router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
+  // set the value of the user and package ids
+  var userId = req.params.TuserId;
+  var packageId = req.params.id;
+
+  // find user in db by id
+  TourUser.findById(userId, (err, foundUser) => {
+    // find package embedded in user
+    var foundPackage = foundUser.packages.id([packageId]);
+    // update package body and completed with data from request body
+    foundPackage.name = req.body.name;
+    foundPackage.image = req.body.image;
+    foundPackage.description = req.body.description;
+    foundUser.save((err, savedUser) => {
+      res.json(foundPackage);
+      res.json(savedUser);
+    });
+  });
+});
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
