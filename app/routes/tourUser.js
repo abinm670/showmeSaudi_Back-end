@@ -38,6 +38,7 @@ router.get('/api/t-user/:id', (req, res) => {
     res.send(foundUser)
   })
 })
+
 //show all user
 router.get('/api/t-users', (req, res) => {
   TourUser.find()
@@ -66,24 +67,6 @@ router.delete('/api/t-user/delete/:id', (req, res) => {
     }
   })
 })
-//Update tour guy profile 
-// router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
-// set a new value of the user and profile 
-// var u_id = req.params.u_id;
-// var p_id = req.params.id;
-// // find user in db by id
-// User.findById(u_id, (err, foundUser) => {
-//     //find profile embeded in user
-//     var foundProfile = foundUser.touring.id(p_id)
-//     //update the profile from the requested body
-//     foundProfile.title = req.body.title;
-//     //save 
-//     foundProfile.save((err, savedUser) => {
-//         res.json(foundProfile);
-//     })
-//     console.log("is good")
-// })
-// })
 // edit - complete
 router.put('/api/t-user_edit/:id', (req, res) => {
   TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
@@ -125,14 +108,6 @@ router.get('/api/protected', passport.authenticate('jwt', { session: false }), (
     user: req.user
   });
 });
-//   //get all comment
-// router.get('/api/comment', (req, res) => {
-//   Comment.find()
-//     .then(comments => {
-//       res.send(comments)
-//       console.log("all comment" )
-//     }).catch(err => console.log(err))
-// })
 
 router.get('/api/t-comment/:tourguyId',  (req, res) => {
   Comment.find({ tourGuy: req.params.tourguyId })
@@ -142,16 +117,6 @@ router.get('/api/t-comment/:tourguyId',  (req, res) => {
       console.log("all com for" + req.params.tourguyId)
     }).catch(err => console.log(err))
 })
-
-// router.get('/api/t-comment/:TourUser',  (req, res) => {
-//   Comment.find({ TourUser: req.params.tourguyId }).populate('comment')
-//     .then(com => { 
-//       res.send(com)
-//       console.log("all com for" + req.params.tourguyId)
-//     }).catch(err => console.log(err))
-// })
-
-
 
 // // write a comment on tour guy profile
 // router.post('/api/comment', (req, res) => {
@@ -227,12 +192,22 @@ router.post('/api/t-users/:TuserId/packages',(req,res)=>{
   })
 })
 
-//get package
+//get package for specific tourGuy
 router.get('/api/t-users/:TuserId/packages',(req,res)=>{
   TourUser.findById(req.params.TuserId,(err,foundUser)=>{
           res.json(foundUser.packages);
   })
 })
+
+
+//get all packages
+router.get('/api/tPack-users', (req, res) => {
+  TourUser.find({}, {packages:1,firstName:1,lastName:1,city:1})
+    .then(pack => {
+      res.send(pack)
+      res.json(pack)
+    }).catch(err => console.log(err))
+})                                  
 
 //update package
 router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
@@ -254,40 +229,29 @@ router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
   });
 });
 
-// // delete package
-// router.delete('/api/t-packages/delete/:id', (req, res) => {
-//   Package.findOne(req.params.id, (err, pack) => {
-//     res.json(pack)
-
-//     // if (err) {
-//     //   res.json("Package not delete")
-//     //   console.log("Package not delete", err)
-//     // }
-//     // else {
-//     //   pack.rem
-//     //   res.json(pack)
-//     //   res.json("perfect delete Package")
-//     //   console.log("perfect delete Package")
-//     // }
-//   }); 
-// });
-
-
-// delete specific package
-router.delete('/api/tourguys/:TuserId/packs/:packId', (req, res) => {
-    TourUser.findById(req.params.TuserId,(err,foundUser)=>{
-      var packs = foundUser.packages.id
-      res.json(packs)
-  })
-})
-
-///////////////////// show tour user rating
+// show tour user rating
 router.get('/api/t-userRate/:id', (req, res) => {
   TourUser.findById(req.params.id, (err, foundUser) => {
   res.json({rate:foundUser.rate,raters:foundUser.raters});
   })
 })
 
+
+router.put('/api/deleteOnePackig/:id' , (req, res)=>{
+  TourUser.findById(req.body.id)
+  .then(user => {
+    var newUser = user 
+    newUser.packages =  user.packages.filter(ele =>{
+      return ele._id != req.params.id
+    })
+    console.log( newUser.packages)
+    TourUser.findByIdAndUpdate(req.body.id , newUser)
+  .then(pack => res.json({msg : "the packig has been removed !!!" , pack}))
+  .catch(err => console.log(err))
+
+  })
+  .catch( err => res.json(err))
+})
 
 // Export the Router so we can use it in the server.js file
 module.exports = router;
