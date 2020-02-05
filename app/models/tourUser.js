@@ -33,6 +33,7 @@ var tourUserSchema = new Schema(
     packages: [packageSchema],  
     likes: { type: Number, default: 0 },
     rate:{type:Number,default:0},
+    raters:{type:Number,default:0},
     price: { type: String, default: "free" }
     //  {timestamps: true }
   })

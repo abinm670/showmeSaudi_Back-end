@@ -280,5 +280,14 @@ router.delete('/api/tourguys/:TuserId/packs/:packId', (req, res) => {
       res.json(packs)
   })
 })
+
+///////////////////// show tour user rating
+router.get('/api/t-userRate/:id', (req, res) => {
+  TourUser.findById(req.params.id, (err, foundUser) => {
+  res.json({rate:foundUser.rate,raters:foundUser.raters});
+  })
+})
+
+
 // Export the Router so we can use it in the server.js file
 module.exports = router;
