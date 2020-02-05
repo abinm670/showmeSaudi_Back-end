@@ -58,24 +58,7 @@ router.delete('/api/r-user/delete/:id', (req, res) => {
     }
   })
 })
-//Update tour guy profile 
-// router.put('/api/user_account/:u_id/profile/:id', (req, res) => {
-// set a new value of the user and profile 
-// var u_id = req.params.u_id;
-// var p_id = req.params.id;
-// // find user in db by id
-// User.findById(u_id, (err, foundUser) => {
-//     //find profile embeded in user
-//     var foundProfile = foundUser.touring.id(p_id)
-//     //update the profile from the requested body
-//     foundProfile.title = req.body.title;
-//     //save 
-//     foundProfile.save((err, savedUser) => {
-//         res.json(foundProfile);
-//     })
-//     console.log("is good")
-// })
-// })
+
 // edit - complete
 router.put('/api/r-user_edit/:id', (req, res) => {
   RegUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
@@ -87,7 +70,7 @@ router.put('/api/r-user_edit/:id', (req, res) => {
 })
 
 
-///////////////////////////// edit - rate
+// edit - rate
 router.put('/api/t-userRate/:id', (req, res) => {
   
   TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
