@@ -19,7 +19,7 @@ var Booking = require('../models/booking');
 var TourUser  = require('../models/tourUser').TourUser
 var Comment = require('../models/comment')
 var Package = require('../models/tourUser').Package
-
+var RegUser = require('../models/regUser')
 //create tourUser 
 router.post('/api/newTuser', (req, res) => {
  
@@ -218,7 +218,7 @@ router.delete('/api/t-booking/delete/:id', (req, res) => {
 
 //add package
 router.post('/api/t-users/:TuserId/packages',(req,res)=>{
-  const newPackage = new Package({name:req.body.name,image:req.body.image,description:req.body.description});
+  const newPackage = new Package({name:req.body.name,packImage:req.body.packImage,description:req.body.description});
   TourUser.findById(req.params.TuserId,(err,foundUser)=>{
       foundUser.packages.push(newPackage);
       foundUser.save((err,savedUser)=>{
@@ -226,12 +226,14 @@ router.post('/api/t-users/:TuserId/packages',(req,res)=>{
       })
   })
 })
+
 //get package
 router.get('/api/t-users/:TuserId/packages',(req,res)=>{
   TourUser.findById(req.params.TuserId,(err,foundUser)=>{
           res.json(foundUser.packages);
   })
 })
+
 //update package
 router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
   // set the value of the user and package ids
@@ -243,7 +245,7 @@ router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
     var foundPackage = foundUser.packages.id([packageId]);
     // update package body and completed with data from request body
     foundPackage.name = req.body.name;
-    foundPackage.image = req.body.image;
+    foundPackage.packImage = req.body.packImage;
     foundPackage.description = req.body.description;
     foundUser.save((err, savedUser) => {
       res.json(foundPackage);
@@ -252,6 +254,32 @@ router.put('/api/t-users/:TuserId/packages/:id', (req, res) => {
   });
 });
 
+// // delete package
+// router.delete('/api/t-packages/delete/:id', (req, res) => {
+//   Package.findOne(req.params.id, (err, pack) => {
+//     res.json(pack)
+
+//     // if (err) {
+//     //   res.json("Package not delete")
+//     //   console.log("Package not delete", err)
+//     // }
+//     // else {
+//     //   pack.rem
+//     //   res.json(pack)
+//     //   res.json("perfect delete Package")
+//     //   console.log("perfect delete Package")
+//     // }
+//   }); 
+// });
+
+
+// delete specific package
+router.delete('/api/tourguys/:TuserId/packs/:packId', (req, res) => {
+    TourUser.findById(req.params.TuserId,(err,foundUser)=>{
+      var packs = foundUser.packages.id
+      res.json(packs)
+  })
+})
 
 ///////////////////// show tour user rating
 router.get('/api/t-userRate/:id', (req, res) => {
