@@ -88,9 +88,9 @@ router.put('/api/r-user_edit/:id', (req, res) => {
 
 
 ///////////////////////////// edit - rate
-router.put('/api/t-userRate/:id', (req, res) => {
-  
-  TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
+router.put('/api/t-userRate/:id/:rate/:raters', (req, res) => {
+  console.log(req.params)
+  TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.params }, { new: true })
       .then(userUpdate => {
         res.json(userUpdate)
       }).catch(err => {
