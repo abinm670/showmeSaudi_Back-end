@@ -88,9 +88,9 @@ router.put('/api/r-user_edit/:id', (req, res) => {
 
 
 ///////////////////////////// edit - rate
-router.put('/api/t-userRate/:id', (req, res) => {
-  
-  TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true })
+router.put('/api/t-userRate/:id/:rate/:raters', (req, res) => {
+  console.log(req.params)
+  TourUser.findOneAndUpdate({ _id: req.params.id }, { $set: req.params }, { new: true })
       .then(userUpdate => {
         res.json(userUpdate)
       }).catch(err => {
@@ -143,10 +143,7 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
       RegUser.findById({ _id: req.params.regUserId })
         .then(Ruser => {
           const regUserb = Ruser
-          if(regUserb==null){      
-            res.send("Book can not made because regular user only can make booking")
-          }
-          else{
+          
             Booking.findOne({date:req.params.date ,tourGuy: tourguyb}, (err, booking) =>{
               if(booking){
                 res.send("Book can not made because this date is already reserved")
@@ -158,7 +155,7 @@ router.post('/api/r-booking/:tourguyId/:regUserId/:date', (req, res) => {
                   )
               }
             })
-          }
+        
         })
     })
 })
