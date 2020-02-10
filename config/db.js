@@ -10,7 +10,7 @@ const mongooseBaseName = 'showmeSaudiapp'
 // `mongodb://localhost/${mongooseBaseName}--development`, 
 // test: `mongodb://localhost/${mongooseBaseName}--test`
 const database = {
-    development: 'mongodb://Ahmed":Asia@ds041188.mlab.com:41188/heroku_vzrgxhlt'
+    development: 'mongodb://nona:Asia1934@ds041188.mlab.com:41188/heroku_vzrgxhlt'
    }
 
 //identify if the development enevirment is test or development
