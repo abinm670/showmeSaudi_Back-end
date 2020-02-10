@@ -1,8 +1,12 @@
+// "main": "server.js",
 {
   "name": "showmesaudi",
   "version": "1.0.0",
-  "description": "\"tour guy database App\"",
-  "main": "server.js",
+  "description": "\"tour guide database App\"",
+  "engines":{
+    "node": "12.11.1"
+
+  },
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
