@@ -4,7 +4,9 @@
   "description": "\"tour guy database App\"",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+
   },
   "author": "\"Golden Developers\"",
   "license": "ISC",
