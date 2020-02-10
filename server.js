@@ -45,7 +45,7 @@ const regUserRouter = require('./app/routes/regUser');
 app.use(regUserRouter);
 
 //Define PORT for API to run on 
-const port = process.env.Port || 7000;
+const port = process.env.Port || 3100;
 
 //Start the server to listen for request on a given port
 app.listen(port, function () {
