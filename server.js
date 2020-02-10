@@ -1,5 +1,7 @@
 //Require necessary NPM packages.
 const express = require('express');
+const parser = require('body-parser');
+
 
 //mongoose required statment 
 const mongoose = require('mongoose');
@@ -14,14 +16,21 @@ mongoose.connect(db, {
 });
 mongoose.connection.once('open', function () {
     console.log('conected to mongo');
-})
+}).catch((error) => {
+    assert.isNotOk(error,'Promise error');
+    done();
+  });
+
 
 
 //Instantiate Express Application Object 
 const app = express();
 app.use(cors())
 
-app.use(express.json());
+//tell node to use json and HTTP header features 
+//in body-parser
+app.use(parser.json());
+app.use(parser.urlencoded({extended:true}));
 
 // require route 
 const indexRouter = require('./app/routes/index');

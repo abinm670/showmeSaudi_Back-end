@@ -7,10 +7,11 @@ const mongooseBaseName = 'showmeSaudiapp'
 //URI formats for defining connections 
 //between applications and MongoDB
 // create the mongoDB URI for 
-
+// `mongodb://localhost/${mongooseBaseName}--development`, 
+// test: `mongodb://localhost/${mongooseBaseName}--test`
 const database = {
-    development: `mongodb://localhost/${mongooseBaseName}--development`, 
-    test: `mongodb://localhost/${mongooseBaseName}--test`}
+    development: 'mongodb://Ahmed":Asia@ds041188.mlab.com:41188/heroku_vzrgxhlt'
+   }
 
 //identify if the development enevirment is test or development
 //select DB based on wheather a test file was executed 
