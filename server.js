@@ -17,9 +17,9 @@ mongoose.connect(db, {
 mongoose.connection.once('open', function () {
     console.log('conected to mongo');
 }).catch((error) => {
-    assert.isNotOk(error,'Promise error');
+    assert.isNotOk(error, 'Promise error');
     done();
-  });
+});
 
 
 
@@ -30,7 +30,7 @@ app.use(cors())
 //tell node to use json and HTTP header features 
 //in body-parser
 app.use(parser.json());
-app.use(parser.urlencoded({extended:true}));
+app.use(parser.urlencoded({ extended: true }));
 
 // require route 
 const indexRouter = require('./app/routes/index');
